@@ -24,14 +24,6 @@ export async function up(knex) {
       .inTable("category")
       .onDelete("SET NULL");
 
-    // store where book is available
-    t.integer("store_id")
-      .unsigned()
-      .nullable()
-      .references("id")
-      .inTable("stores")
-      .onDelete("SET NULL");
-
     // status of the book (available / rented)
     t.string("status")
       .notNullable()
