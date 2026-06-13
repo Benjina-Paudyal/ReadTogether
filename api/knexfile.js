@@ -1,19 +1,9 @@
 import "dotenv/config";
+import { createKnexConfig } from "./src/configs/knex-config.js";
+
+const config = createKnexConfig();
 
 export default {
-  development: {
-    client: "pg",
-    connection: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      port: Number(process.env.DB_PORT || 5432),
-      ssl: { rejectUnauthorized: false },
-    },
-    migrations: {
-      directory: "./src/db/migrations",
-      loadExtensions: [".mjs"],
-    },
-  },
+  development: config,
+  production: config,
 };
