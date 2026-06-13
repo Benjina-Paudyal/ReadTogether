@@ -1,5 +1,5 @@
 export async function up(knex) {
-  await knex.schema.createTable("books", (t) => {
+  await knex.schema.createTable("Books", (t) => {
     t.increments("id").primary();
 
     t.string("title").notNullable();
@@ -13,7 +13,7 @@ export async function up(knex) {
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("users")
+      .inTable("Users")
       .onDelete("CASCADE");
 
     // category of the book
@@ -21,19 +21,16 @@ export async function up(knex) {
       .unsigned()
       .nullable()
       .references("id")
-      .inTable("category")
+      .inTable("Category")
       .onDelete("SET NULL");
 
     // status of the book (available / rented)
-    t.string("status")
-      .notNullable()
-      .defaultTo("available");
+    t.string("status").notNullable().defaultTo("available");
 
     t.timestamps(true, true);
   });
 }
 
 export async function down(knex) {
-  await knex.schema.dropTableIfExists("books");
+  await knex.schema.dropTableIfExists("Books");
 }
-
