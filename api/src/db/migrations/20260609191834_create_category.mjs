@@ -1,5 +1,5 @@
 export async function up(knex) {
-  await knex.schema.createTable("category", (t) => {
+  await knex.schema.createTable("Category", (t) => {
     t.increments("id").primary();
     t.string("name").notNullable().unique();
     t.timestamps(true, true);
@@ -7,5 +7,5 @@ export async function up(knex) {
 }
 
 export async function down(knex) {
-  await knex.schema.dropTableIfExists("category");
+  await knex.schema.dropTableIfExists("Category");
 }
