@@ -1,9 +1,9 @@
 export async function seed(knex) {
   // Deletes ALL existing entries
-  await knex("category").del();
+  await knex("Category").del();
 
   // Inserts seed entries
-  await knex("category").insert([
+  await knex("Category").insert([
     { name: "Fiction" },
     { name: "Non-Fiction" },
     { name: "Science" },
@@ -13,6 +13,6 @@ export async function seed(knex) {
     { name: "Fantasy" },
     { name: "Horror" },
     { name: "Romance" },
-    { name: "Education" }
+    { name: "Education" },
   ]);
 }

@@ -1,15 +1,15 @@
 export async function seed(knex) {
   // clear books first
-  await knex("books").del();
+  await knex("Books").del();
 
-  await knex("books").insert([
+  await knex("Books").insert([
     {
       title: "Clean Code",
       description: "A handbook of writing clean and maintainable code",
       cover_url: "https://example.com/covers/cleancode.jpg",
       user_id: 1,
       category_id: 4,
-      status: "available"
+      status: "available",
     },
     {
       title: "Harry Potter and the Philosopher's Stone",
@@ -17,7 +17,7 @@ export async function seed(knex) {
       cover_url: "https://example.com/covers/harry1.jpg",
       user_id: 1,
       category_id: 7,
-      status: "rented"
+      status: "rented",
     },
     {
       title: "A Brief History of Time",
@@ -25,7 +25,7 @@ export async function seed(knex) {
       cover_url: "https://example.com/covers/time.jpg",
       user_id: 2,
       category_id: 3,
-      status: "available"
+      status: "available",
     },
     {
       title: "The Lean Startup",
@@ -33,7 +33,7 @@ export async function seed(knex) {
       cover_url: "https://example.com/covers/lean.jpg",
       user_id: 2,
       category_id: 4,
-      status: "available"
+      status: "available",
     },
     {
       title: "The Art of War",
@@ -41,7 +41,7 @@ export async function seed(knex) {
       cover_url: "https://example.com/covers/war.jpg",
       user_id: 3,
       category_id: 5,
-      status: "rented"
-    }
+      status: "rented",
+    },
   ]);
 }
