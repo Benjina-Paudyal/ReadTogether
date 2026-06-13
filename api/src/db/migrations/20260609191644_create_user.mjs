@@ -6,8 +6,11 @@ export async function up(knex) {
     t.string("name").notNullable();
     t.string("location").notNullable();
 
-    //role (normal_user, admin)
+    // role (normal_user, admin)
     t.string("role").notNullable().defaultTo("normal_user");
+
+    // location (nullable by default)
+    t.string("location");
 
     t.timestamps(true, true);
   });
