@@ -1,10 +1,12 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import authRouter from "./routers/authRoutes.js";
 
-// for swagger
+import knex from "./configs/knex-config.js";
+
+import authRouter from "./routers/authRoutes.js";
+import userRouter from "./routers/user.js";
+
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 
@@ -12,13 +14,35 @@ const app = express();
 
 // middleware
 app.use(cors());
-app.use(bodyParser.json()); // or app.use(express.json())
+app.use(express.json());
 
 // swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// auth service (remember MVC)
+// auth routes
 app.use("/api/auth", authRouter);
+
+// user routes
+app.use("/api", userRouter);
+
+// health check
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "ReadTogether backend server is running and healthy!",
+    timestamp: new Date(),
+  });
+});
+
+// example DB test route
+app.get("/api/db-test", async (req, res) => {
+  try {
+    const data = await knex("practise_table");
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 const PORT = process.env.PORT ?? 3000;
 
