@@ -14,7 +14,11 @@
     "format": "npx prettier . --write",
     "check": "npx eslint . --fix",
     "prepare": "husky",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "migrate:make": "knex migrate:make --knexfile knexfile.js",
+    "migrate:latest": "knex migrate:latest --knexfile knexfile.js",
+    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
+    "migrate:status": "knex migrate:list --knexfile knexfile.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -26,7 +30,9 @@
     "knex": "^3.1.0",
     "mysql2": "^3.10.0",
     "pg": "^8.11.5",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
