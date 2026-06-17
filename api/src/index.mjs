@@ -1,12 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-
 import knex from "./configs/knex-config.js";
-
 import authRouter from "./routers/authRoutes.js";
 import userRouter from "./routers/user.js";
-
+import bookRouter from "./routers/bookRoutes.js";
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 
@@ -25,6 +23,9 @@ app.use("/api/auth", authRouter);
 // user routes
 app.use("/api", userRouter);
 
+// book routes
+app.use("/api/books", bookRouter);
+
 // health check
 app.get("/api/health", (req, res) => {
   res.status(200).json({
@@ -34,7 +35,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// example DB test route
+// DB test route
 app.get("/api/db-test", async (req, res) => {
   try {
     const data = await knex("practise_table");
