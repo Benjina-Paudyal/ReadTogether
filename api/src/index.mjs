@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import knex from "./database_client.js";
+import userRouter from "./routers/user.js";
 import nestedRouter from "./routers/nested.js";
 
 const app = express();
@@ -26,6 +27,7 @@ apiRouter.get("/", async (req, res) => {
 
 // Nested routes
 apiRouter.use("/nested", nestedRouter);
+app.use("/api/users", userRouter);
 
 app.use("/api", apiRouter);
 
