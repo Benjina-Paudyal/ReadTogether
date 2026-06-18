@@ -15,24 +15,6 @@ export const createBook = async (data, userId) => {
   return book;
 };
 
-//READ
-// export const getBooks = async (filters = {}) => {
-//   const query = knex("Books");
-//   if (filters.title) {
-//     query.whereILike("title", `%${filters.title}%`);
-//   }
-//   if (filters.description) {
-//     query.whereILike("description", `%${filters.description}%`);
-//   }
-//   if (filters.category_id) {
-//     query.where("category_id", filters.category_id);
-//   }
-//   if (filters.condition) {
-//     query.where("condition", filters.condition);
-//   }
-//   return query;
-// };
-
 // READ (with FILTERS + PAGINATION)
 export const getBooks = async (filters = {}) => {
   const {
@@ -80,6 +62,7 @@ export const getBooks = async (filters = {}) => {
   };
 };
 
+
 //READ BY ID
 export const getBookById = async (id) => {
   return knex("Books").where({ id }).first();
@@ -87,21 +70,23 @@ export const getBookById = async (id) => {
 
 export const checkAvailability = async (bookId) => {
   const book = await knex("Books").where({ id: bookId }).first();
+
   if (!book) {
     return { error: "Book not found" };
   }
 
   const activeRental = await knex("Rentals")
-    .where({
-      book_id: bookId,
-      status: "approved",
-    })
+    .where({ book_id: bookId })
+    .whereIn("status", ["requested", "approved", "rented"])
     .first();
+
   return {
     bookId,
     available: !activeRental,
+    status: activeRental ? activeRental.status : "available",
   };
 };
+
 
 //UPDATE
 export const updateBook = async (id, data, userId) => {
