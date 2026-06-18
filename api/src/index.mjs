@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import knex from "./database_client.js";
+import connection from "./configs/knex-config.js";
 
 // for swagger
 import swaggerSpec from "./swagger.js";
@@ -30,8 +30,6 @@ apiRouter.get("/", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
 
 app.use("/api", apiRouter);
 
