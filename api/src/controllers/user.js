@@ -1,10 +1,10 @@
-import { getCurrentUserBorrowedService } from "../services/user.js";
+import { getCurrentUserBorrowedBooks } from "../services/user.js";
 
 export const getCurrentUserBorrowedController = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const borrowedBooks = await getCurrentUserBorrowedService(userId);
+    const borrowedBooks = await getCurrentUserBorrowedBooks(userId);
 
     return res.status(200).json(borrowedBooks);
   } catch (error) {

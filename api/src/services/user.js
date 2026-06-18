@@ -1,6 +1,6 @@
 import connection from "../configs/knex-config.js";
 
-export const getCurrentUserBorrowedService = async (userId) => {
+export const getCurrentUserBorrowedBooks = async (userId) => {
   const borrowedBooks = await connection("Rentals")
     .join("Books", "Rentals.book_id", "=", "Books.id")
     .where("Rentals.borrower_id", userId)
