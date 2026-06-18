@@ -3,6 +3,7 @@ import { getCurrentUserBooksController } from "../controllers/user.js";
 
 const router = express.Router();
 
+//temporary middleware
 const mockAuthenticateToken = (req, res, next) => {
   req.user = { id: 1 };
   next();

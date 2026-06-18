@@ -10,6 +10,7 @@ export const getCurrentUserBooksController = async (req, res) => {
     return res.status(200).json(books);
   } catch (error) {
     console.error("Get Books Error:", error);
+
     return res.status(500).json({
       error: "Internal Server Error",
       message: "Failed to retrieve your library.",
