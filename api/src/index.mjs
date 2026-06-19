@@ -1,7 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import knex from "./database_client.js";
+import knex from "./configs/knex-config.js";
+import userRouter from "./routers/user.js";
 
 // for swagger
 import swaggerSpec from "./swagger.js";
@@ -11,7 +12,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
@@ -27,8 +28,7 @@ apiRouter.get("/", async (req, res) => {
   }
 });
 
-// Nested routes
-apiRouter.use("/nested", nestedRouter);
+apiRouter.use("/users", userRouter);
 
 app.use("/api", apiRouter);
 
