@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
+import bookRoutes from "./routers/book.routes.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
@@ -32,9 +33,8 @@ apiRouter.get("/", async (req, res) => {
   }
 });
 
-
-
 app.use("/api", apiRouter);
+app.use("/api/books", bookRoutes);
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
