@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import knex from "./database_client.js";
+import connection from "./configs/knex-config.js";
 
 // for swagger
 import swaggerSpec from "./swagger.js";
@@ -23,7 +23,7 @@ const PORT = process.env.PORT ?? 3000;
 // Example route to check DB
 apiRouter.get("/", async (req, res) => {
   try {
-    const data = await knex("practise_table"); // table must exist in DB
+    const data = await connection("practise_table"); // table must exist in DB
     res.json(data);
   } catch (err) {
     console.error(err);
