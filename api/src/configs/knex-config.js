@@ -12,12 +12,15 @@ export function createKnexConfig() {
       port: Number(process.env.DB_PORT || 5432),
       ssl: { rejectUnauthorized: false },
     },
-    migrations: {
+
+        migrations: {
       directory: "./src/db/migrations",
-      loadExtensions: [".mjs"],
+      loadExtensions: [".js"],
     },
+
     seeds: {
       directory: "./src/db/seeds",
+      loadExtensions: [".js"],
     },
   };
 }

@@ -8,6 +8,9 @@ export async function up(knex) {
     // book cover image (URL or file path)
     t.string("cover_url").nullable();
 
+    // book condition (good or damaged)
+    t.string("condition").notNullable().defaultTo("good");
+
     // who posted the book
     t.integer("user_id")
       .unsigned()
@@ -23,9 +26,6 @@ export async function up(knex) {
       .references("id")
       .inTable("Category")
       .onDelete("SET NULL");
-
-    // status of the book (available / rented)
-    t.string("status").notNullable().defaultTo("available");
 
     t.timestamps(true, true);
   });
