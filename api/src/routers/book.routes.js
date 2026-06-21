@@ -5,6 +5,7 @@ import {
   createBook,
   updateBook,
   deleteBook,
+  getAvailability,
 } from "../controllers/book.controller.js";
 
 const router = express.Router();
@@ -18,10 +19,13 @@ router.get("/:id", getBookById);
 // POST /api/books
 router.post("/", createBook);
 
-// PUT /api/books/:id  (UPDATE)
+// PUT /api/books/:id 
 router.put("/:id", updateBook);
 
 // DELETE /api/books/:id
 router.delete("/:id", deleteBook);
+
+// GET /api/books/:id/availability
+router.get("/:id/availability", getAvailability)
 
 export default router;

@@ -4,7 +4,9 @@ import {
   createNewBook as createBookService,
   updateBook as updateBookService,
   deleteBook as deleteBookService,
+  checkBookAvailability,
 } from "../services/book.service.js";
+
 
 export async function getBooks(req, res) {
   try {
@@ -72,5 +74,20 @@ export async function deleteBook(req, res) {
     }
     console.error(`Error deleting book ${req.params.id}:`, err);
     return res.status(500).json({ message: "Failed to delete book" });
+  }
+}
+
+export async function getAvailability(req, res) {
+  try {
+    const result = await checkBookAvailability(req.params.id);
+    res.json({
+      data: result,
+    });
+  } catch (err) {
+    if (err.message === "BOOK_NOT_FOUND") {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    console.error("Error in getAvailability:", err);
+    res.status(500).json({ message: "An unexpected error occurred" });
   }
 }

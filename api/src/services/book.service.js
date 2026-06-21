@@ -8,6 +8,7 @@ import {
 } from "../models/book.model.js";
 
 import { createBookSchema } from "../validators/book.validator.js";
+import { findActiveRentalByBookId } from "../models/rental.model.js";
 
 export async function getAllBooks(query) {
   const page = Number(query.page) || 1;
@@ -38,7 +39,6 @@ export async function getAllBooks(query) {
   };
 }
 
-
 export async function getBookById(id) {
   const book = await findBookById(id);
   if (!book) {
@@ -47,12 +47,10 @@ export async function getBookById(id) {
   return book;
 }
 
-
 export async function createNewBook(bookData) {
   const parsedData = createBookSchema.parse(bookData);
   return await createBookModel(parsedData);
 }
-
 
 export async function updateBook(id, bookData) {
   const existingBook = await findBookById(id);
@@ -66,7 +64,6 @@ export async function updateBook(id, bookData) {
   return updatedBook;
 }
 
-
 export async function deleteBook(id) {
   const existingBook = await findBookById(id);
 
@@ -77,4 +74,17 @@ export async function deleteBook(id) {
   await deleteBookModel(id);
 
   return { message: "Book deleted successfully" };
+}
+
+export async function checkBookAvailability(id) {
+  const book = await findBookById(id);
+  if (!book) {
+    throw new Error("BOOK_NOT_FOUND");
+  }
+  const rental = await findActiveRentalByBookId(id);
+  return {
+    bookId: book.id,
+    available: rental ? false : true,
+    status: rental ? rental.status : "available",
+  };
 }
