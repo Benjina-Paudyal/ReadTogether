@@ -87,3 +87,38 @@ export async function createBook(bookData) {
 
   return newBook;
 }
+
+//UPDATE BOOK
+export async function updateBook(id, bookData) {
+  const [updatedBook] = await db("Books")
+    .where("id", id)
+    .update(
+      {
+        title: bookData.title,
+        description: bookData.description,
+        cover_url: bookData.cover_url,
+        condition: bookData.condition,
+        category_id: bookData.category_id,
+      },
+      [
+        "id",
+        "title",
+        "description",
+        "cover_url",
+        "condition",
+        "category_id",
+        "user_id",
+        "created_at",
+        "updated_at",
+      ]
+    );
+
+  return updatedBook;
+}
+
+//DELETE
+export async function deleteBook(id) {
+  return await db("Books")
+    .where("id", id)
+    .del();
+}

@@ -2,6 +2,8 @@ import {
   getAllBooks as getAllBooksService,
   getBookById as getBookByIdService,
   createNewBook as createBookService,
+  updateBook as updateBookService,
+  deleteBook as deleteBookService,
 } from "../services/book.service.js";
 
 export async function getBooks(req, res) {
@@ -38,5 +40,37 @@ export async function createBook(req, res) {
   } catch (err) {
     console.error("Error creating book:", err);
     return res.status(500).json({ message: "Failed to create book" });
+  }
+}
+
+export async function updateBook(req, res) {
+  try {
+    const updatedBook = await updateBookService(req.params.id, {
+      ...req.body,
+      user_id: req.body.user_id, // later: req.user.id (WHEN MIDDLEWARE)
+    });
+
+    return res.json(updatedBook);
+  } catch (err) {
+    if (err.message === "BOOK_NOT_FOUND") {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    console.error(`Error updating book ${req.params.id}:`, err);
+    return res.status(500).json({ message: "Failed to update book" });
+  }
+}
+
+export async function deleteBook(req, res) {
+  try {
+    const result = await deleteBookService(req.params.id);
+
+    return res.json(result);
+  } catch (err) {
+    if (err.message === "BOOK_NOT_FOUND") {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    console.error(`Error deleting book ${req.params.id}:`, err);
+    return res.status(500).json({ message: "Failed to delete book" });
   }
 }
