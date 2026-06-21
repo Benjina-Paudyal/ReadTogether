@@ -1,6 +1,7 @@
 import {
   getAllBooks as getAllBooksService,
   getBookById as getBookByIdService,
+  createNewBook as createBookService,
 } from "../services/book.service.js";
 
 export async function getBooks(req, res) {
@@ -21,8 +22,21 @@ export async function getBookById(req, res) {
     if (err.message === "BOOK_NOT_FOUND") {
       return res.status(404).json({ message: "Book not found" });
     }
-
     console.error(`Error in getBookById for ID ${req.params.id}:`, err);
     res.status(500).json({ message: "An unexpected error occurred" });
+  }
+}
+
+export async function createBook(req, res) {
+  try {
+    const newBook = await createBookService({
+      ...req.body,
+      user_id: req.body.user_id, // LATER: req.user.id WHEN MIDDLEWARE CREATED
+    });
+
+    return res.status(201).json(newBook);
+  } catch (err) {
+    console.error("Error creating book:", err);
+    return res.status(500).json({ message: "Failed to create book" });
   }
 }

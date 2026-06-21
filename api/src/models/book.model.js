@@ -9,11 +9,9 @@ function applyBookFilters(query, { search, category }) {
       );
     });
   }
-
   if (category) {
-    query.whereILike("Category.name", category);
+    query.where("Category.name", category);
   }
-
   return query;
 }
 
@@ -32,9 +30,7 @@ export function findAllBooks({ limit = 10, offset = 0, search, category }) {
       "Books.updated_at",
       "Category.name as category_name",
     );
-
   query = applyBookFilters(query, { search, category });
-
   return query.limit(Number(limit)).offset(Number(offset));
 }
 
@@ -43,9 +39,7 @@ export function countAllBooks({ search, category }) {
   let query = db("Books")
     .leftJoin("Category", "Books.category_id", "Category.id")
     .count("Books.id as total");
-
   query = applyBookFilters(query, { search, category });
-
   return query.first();
 }
 
@@ -66,4 +60,30 @@ export function findBookById(id) {
     )
     .where("Books.id", id)
     .first();
+}
+
+// CREATE BOOK
+export async function createBook(bookData) {
+  const [newBook] = await db("Books")
+    .insert({
+      title: bookData.title,
+      description: bookData.description,
+      cover_url: bookData.cover_url,
+      condition: bookData.condition,
+      category_id: bookData.category_id,
+      user_id: bookData.user_id,
+    })
+    .returning([
+      "id",
+      "title",
+      "description",
+      "cover_url",
+      "condition",
+      "category_id",
+      "user_id",
+      "created_at",
+      "updated_at",
+    ]);
+
+  return newBook;
 }
