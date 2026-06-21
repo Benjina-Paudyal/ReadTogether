@@ -5,7 +5,8 @@ import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
 
 // for swagger
-import swaggerSpec from "./swagger.js";
+// import swaggerSpec from "./swagger.js";
+import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
