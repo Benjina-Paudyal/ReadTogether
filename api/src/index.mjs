@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
-import bookRoutes from "./routers/book.routes.js";
+import bookRoutes from "./routers/book.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
