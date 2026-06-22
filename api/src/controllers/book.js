@@ -5,7 +5,7 @@ import {
   updateBook as updateBookService,
   deleteBook as deleteBookService,
   checkBookAvailability,
-} from "../services/book.service.js";
+} from "../services/book.js";
 
 
 export async function getBooks(req, res) {

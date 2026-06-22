@@ -5,10 +5,10 @@ import {
   createBook as createBookModel,
   updateBook as updateBookModel,
   deleteBook as deleteBookModel,
-} from "../models/book.model.js";
+} from "../models/book.js";
 
-import { createBookSchema } from "../validators/book.validator.js";
-import { findActiveRentalByBookId } from "../models/rental.model.js";
+import { createBookSchema } from "../validators/book.js";
+import { findActiveRentalByBookId } from "../models/rental.js";
 
 export async function getAllBooks(query) {
   const page = Number(query.page) || 1;
