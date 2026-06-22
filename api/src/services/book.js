@@ -46,7 +46,6 @@ export async function getBookById(id) {
   return book;
 }
 
-
 // TODO: Ensure user_id is enforced from authenticated user in controller layer
 export async function createNewBook(bookData) {
   return await createBookModel(bookData);
@@ -59,10 +58,8 @@ export async function updateBook(id, bookData) {
   if (!existingBook) {
     throw new Error("BOOK_NOT_FOUND");
   }
-
   return await updateBookModel(id, bookData);
 }
-
 
 // TODO: Restrict deletion to book owner after auth implementation
 export async function deleteBook(id) {
@@ -71,11 +68,10 @@ export async function deleteBook(id) {
   if (!existingBook) {
     throw new Error("BOOK_NOT_FOUND");
   }
-
   await deleteBookModel(id);
-
   return { message: "Book deleted successfully" };
 }
+
 
 export async function checkBookAvailability(id) {
   const book = await findBookById(id);
