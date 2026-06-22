@@ -1,4 +1,4 @@
-import { findAllUsers, findUserById, findUserByEmail } from "../models/user.js";
+import { findAllUsers, findUserById } from "../models/user.js";
 
 //Get all users
 export const getAllUsers = async (req, res) => {
@@ -25,26 +25,5 @@ export const getUserById = async (req, res) => {
   } catch (error) {
     console.error("Get User By ID Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-// Get user by email
-export const getUserByEmail = async (req, res) => {
-  try {
-    const user = await findUserByEmail(req.params.email);
-
-    if (!user) {
-      return res.status(404).json({
-        error: "User not found",
-      });
-    }
-
-    return res.status(200).json(user);
-  } catch (error) {
-    console.error("Get User By Email Error:", error);
-
-    return res.status(500).json({
-      error: "Internal Server Error",
-    });
   }
 };

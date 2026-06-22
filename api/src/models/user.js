@@ -19,7 +19,7 @@ export const findUserById = async (id) => {
     .first();
 };
 
-// Get user by email
+// Get user by email (Kept for internal use by Auth/Registration workflows)
 export const findUserByEmail = async (email) => {
   return await connection("Users")
     .where({ email })
