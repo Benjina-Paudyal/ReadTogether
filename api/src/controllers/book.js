@@ -6,6 +6,7 @@ import {
   deleteBook as deleteBookService,
   checkBookAvailability,
 } from "../services/book.js";
+import { createBookSchema } from "../validators/book.js";
 
 
 export async function getBooks(req, res) {
@@ -33,29 +34,45 @@ export async function getBookById(req, res) {
 
 export async function createBook(req, res) {
   try {
+    const parsedData = createBookSchema.parse(req.body);
+
     const newBook = await createBookService({
-      ...req.body,
-      user_id: req.body.user_id, // TO DO: req.user.id WHEN MIDDLEWARE CREATED
+      ...parsedData,
+      user_id: req.user?.id, // TODO: auth middleware later
     });
 
     return res.status(201).json(newBook);
   } catch (err) {
+    if (err.name === "ZodError") {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: err.errors,
+      });
+    }
+
     console.error("Error creating book:", err);
     return res.status(500).json({ message: "Failed to create book" });
   }
 }
 
+
 export async function updateBook(req, res) {
   try {
-    const updatedBook = await updateBookService(req.params.id, {
-      ...req.body,
-      user_id: req.body.user_id, // TO DO: req.user.id (WHEN MIDDLEWARE)
-    });
+    const parsedData = createBookSchema.partial().parse(req.body);
+
+    const updatedBook = await updateBookService(req.params.id, parsedData);
 
     return res.json(updatedBook);
   } catch (err) {
     if (err.message === "BOOK_NOT_FOUND") {
       return res.status(404).json({ message: "Book not found" });
+    }
+
+    if (err.name === "ZodError") {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: err.errors,
+      });
     }
 
     console.error(`Error updating book ${req.params.id}:`, err);

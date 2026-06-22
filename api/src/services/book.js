@@ -7,7 +7,6 @@ import {
   deleteBook as deleteBookModel,
 } from "../models/book.js";
 
-import { createBookSchema } from "../validators/book.js";
 import { findActiveRentalByBookId } from "../models/rental.js";
 
 export async function getAllBooks(query) {
@@ -48,8 +47,7 @@ export async function getBookById(id) {
 }
 
 export async function createNewBook(bookData) {
-  const parsedData = createBookSchema.parse(bookData);
-  return await createBookModel(parsedData);
+  return await createBookModel(bookData);
 }
 
 export async function updateBook(id, bookData) {
@@ -59,9 +57,7 @@ export async function updateBook(id, bookData) {
     throw new Error("BOOK_NOT_FOUND");
   }
 
-  const parsedData = createBookSchema.partial().parse(bookData);
-  const updatedBook = await updateBookModel(id, parsedData);
-  return updatedBook;
+  return await updateBookModel(id, bookData);
 }
 
 export async function deleteBook(id) {
