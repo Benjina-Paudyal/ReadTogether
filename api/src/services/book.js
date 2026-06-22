@@ -46,10 +46,13 @@ export async function getBookById(id) {
   return book;
 }
 
+
+// TODO: Ensure user_id is enforced from authenticated user in controller layer
 export async function createNewBook(bookData) {
   return await createBookModel(bookData);
 }
 
+// TODO: Add ownership validation (book.user_id === req.user.id) after auth implementation
 export async function updateBook(id, bookData) {
   const existingBook = await findBookById(id);
 
@@ -60,6 +63,8 @@ export async function updateBook(id, bookData) {
   return await updateBookModel(id, bookData);
 }
 
+
+// TODO: Restrict deletion to book owner after auth implementation
 export async function deleteBook(id) {
   const existingBook = await findBookById(id);
 

@@ -8,7 +8,6 @@ import {
 } from "../services/book.js";
 import { createBookSchema } from "../validators/book.js";
 
-
 export async function getBooks(req, res) {
   try {
     const result = await getAllBooksService(req.query);
@@ -32,13 +31,14 @@ export async function getBookById(req, res) {
   }
 }
 
+// TODO: Add JWT authentication middleware (req.user required)
 export async function createBook(req, res) {
   try {
     const parsedData = createBookSchema.parse(req.body);
 
     const newBook = await createBookService({
       ...parsedData,
-      user_id: req.user?.id, // TODO: auth middleware later
+      user_id: req.user?.id,
     });
 
     return res.status(201).json(newBook);
@@ -49,13 +49,13 @@ export async function createBook(req, res) {
         errors: err.errors,
       });
     }
-
     console.error("Error creating book:", err);
     return res.status(500).json({ message: "Failed to create book" });
   }
 }
 
-
+// TODO: Add JWT authentication middleware (req.user required)
+// TODO: Allow only book owner to update (authorization check in service layer)
 export async function updateBook(req, res) {
   try {
     const parsedData = createBookSchema.partial().parse(req.body);
@@ -80,6 +80,8 @@ export async function updateBook(req, res) {
   }
 }
 
+// TODO: Add JWT authentication middleware (req.user required)
+// TODO: Allow only book owner to delete (authorization check in service layer)
 export async function deleteBook(req, res) {
   try {
     const result = await deleteBookService(req.params.id);
