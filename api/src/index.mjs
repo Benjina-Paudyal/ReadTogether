@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
+import categoryRoutes from "./routers/categoryRoutes.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
@@ -18,6 +19,8 @@ app.use(bodyParser.json()); // or app.use(express.json())
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+
+
 const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
@@ -32,6 +35,8 @@ apiRouter.get("/", async (req, res) => {
   }
 });
 
+// category routes
+app.use("/api/categories", categoryRoutes);
 
 
 app.use("/api", apiRouter);

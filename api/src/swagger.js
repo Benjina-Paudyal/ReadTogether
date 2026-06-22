@@ -22,6 +22,10 @@ const options = {
         name: "User",
         description: "User APIs"
       },
+      {
+        name: "Categories",
+        description: "Categories APIs"
+      },
       
     ],
 
