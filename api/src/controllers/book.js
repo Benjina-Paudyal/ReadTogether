@@ -35,7 +35,7 @@ export async function createBook(req, res) {
   try {
     const newBook = await createBookService({
       ...req.body,
-      user_id: req.body.user_id, // LATER: req.user.id WHEN MIDDLEWARE CREATED
+      user_id: req.body.user_id, // TO DO: req.user.id WHEN MIDDLEWARE CREATED
     });
 
     return res.status(201).json(newBook);
@@ -49,7 +49,7 @@ export async function updateBook(req, res) {
   try {
     const updatedBook = await updateBookService(req.params.id, {
       ...req.body,
-      user_id: req.body.user_id, // later: req.user.id (WHEN MIDDLEWARE)
+      user_id: req.body.user_id, // TO DO: req.user.id (WHEN MIDDLEWARE)
     });
 
     return res.json(updatedBook);
