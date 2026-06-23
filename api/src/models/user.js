@@ -31,3 +31,19 @@ export const findUserByEmail = async (email) => {
 export const findBooksByUserId = async (userId) => {
   return await connection("Books").where({ user_id: userId }).select("*");
 };
+
+//Fetch all books borrowed by a specific user from the Books table
+export const findBorrowedBooksByUserId = async (userId) => {
+  return await connection("Rentals")
+    .join("Books", "Rentals.book_id", "=", "Books.id")
+    .where("Rentals.borrower_id", userId)
+    .andWhere("Rentals.status", "rented")
+    .select(
+      "Books.id as book_id",
+      "Books.title",
+      "Books.description",
+      "Rentals.id as rental_id",
+      "Rentals.status",
+      "Rentals.due_date"
+    );
+};

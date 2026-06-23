@@ -3,6 +3,7 @@ import {
   getAllUsers,
   getUserById,
   getCurrentUserBooksController,
+  getCurrentUserBorrowedController,
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -123,5 +124,40 @@ const mockAuth = (req, res, next) => {
 };
 
 router.get("/me/books", mockAuth, getCurrentUserBooksController);
+
+/**
+ * @swagger
+ * /api/users/me/borrowed:
+ *    get:
+ *       summary: Get books currently borrowed by the user
+ *       description: Retrieves list of all active rentals that are currently checked out by the logged-in user.
+ *       responses:
+ *         200:
+ *            description: A list of actively borrowed books.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  type: array
+ *                items:
+ *                  type: object
+ *                properties:
+ *                  book_id:
+ *                    type: integer
+ *                  title:
+ *                    type: string
+ *                  description:
+ *                    type: string
+ *                  rental_id:
+ *                    type: integer
+ *                  status:
+ *                    type: string
+ *                  due_date:
+ *                    type: string
+ *                  format: date
+ *         500:
+ *            description: Internal Server Error
+ */
+
+router.get("/me/borrowed", mockAuth, getCurrentUserBorrowedController);
 
 export default router;
