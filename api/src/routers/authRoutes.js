@@ -1,5 +1,6 @@
 import express from "express";
-import { login } from "../controllers/authController.js";
+import { login , me} from "../controllers/authController.js";
+import {authMiddleware} from "../middlewares/auth.js"
 
 const router = express.Router();
 
@@ -43,5 +44,22 @@ const router = express.Router();
  *         description: Invalid credentials
  */
 router.post("/login", login);
+
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user data
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/me", authMiddleware, me);
+
 
 export default router;

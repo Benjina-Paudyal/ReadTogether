@@ -25,3 +25,21 @@ export async function login(req, res) {
     });
   }
 }
+
+// profile (testing middleware (not requirement))
+export const me = (req, res) => {
+  try {
+    // user comes from authMiddleware
+    const user = req.user;
+
+    return res.json({
+      message: "Current user fetched successfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
