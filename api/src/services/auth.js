@@ -1,4 +1,4 @@
-import { BcryptService } from "../services/encription.js";
+import { comparePassword } from "../services/encription.js";
 
 const FAKE_USER = {
   id: 1,
@@ -15,7 +15,7 @@ export async function login(email, password) {
   }
 
   // 2. use service (NOT bcrypt directly)
-  const isMatch = await BcryptService.comparePassword(
+  const isMatch = await comparePassword(
     password,
     FAKE_USER.passwordHash
   );

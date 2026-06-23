@@ -8,14 +8,12 @@ if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is missing in .env");
 }
 
-export const JwtService = {
-  issueToken(payload) {
-    return jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    });
-  },
+export function issueToken(payload) {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN,
+  });
+}
 
-  verifyToken(token) {
-    return jwt.verify(token, JWT_SECRET);
-  },
-};
+export function verifyToken(token) {
+  return jwt.verify(token, JWT_SECRET);
+}

@@ -1,5 +1,5 @@
 import { login as authLogin } from "../services/auth.js";
-import { JwtService } from "../services/jwt.js";
+import { issueToken } from "../services/jwt.js";
 
 export async function login(req, res) {
   try {
@@ -9,7 +9,7 @@ export async function login(req, res) {
     const user = await authLogin(email, password);
 
     // generate JWT in controller
-    const token = JwtService.issueToken({
+    const token = issueToken({
       id: user.id,
       email: user.email,
       role: user.role,
