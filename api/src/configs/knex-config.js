@@ -10,10 +10,10 @@ export function createKnexConfig() {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       port: Number(process.env.DB_PORT || 5432),
-      /* ssl: { rejectUnauthorized: false }, */
+      ssl: { rejectUnauthorized: false },
     },
 
-        migrations: {
+    migrations: {
       directory: "./src/db/migrations",
       loadExtensions: [".js"],
     },
