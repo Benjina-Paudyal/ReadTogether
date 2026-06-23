@@ -1,4 +1,5 @@
 import { findAllUsers, findUserById } from "../models/user.js";
+import { getCurrentUserBooks } from "../services/user.js";
 
 //Get all users
 export const getAllUsers = async (req, res) => {
@@ -25,5 +26,20 @@ export const getUserById = async (req, res) => {
   } catch (error) {
     console.error("Get User By ID Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getCurrentUserBooksController = async (req, res) => {
+  try {
+    const userId = req.user.id; // Attached by auth middleware
+    const books = await getCurrentUserBooks(userId);
+
+    return res.status(200).json(books);
+  } catch (error) {
+    console.error("Get Books Error:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "Failed to retrieve your library.",
+    });
   }
 };

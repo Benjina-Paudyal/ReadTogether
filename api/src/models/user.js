@@ -26,3 +26,8 @@ export const findUserByEmail = async (email) => {
     .select("id", "name", "email", "location", "created_at")
     .first();
 };
+
+//Fetch all books belonging to a specific user from the Books table
+export const findBooksByUserId = async (userId) => {
+  return await connection("Books").where({ user_id: userId }).select("*");
+};

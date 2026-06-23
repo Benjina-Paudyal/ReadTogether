@@ -1,5 +1,9 @@
 import express from "express";
-import { getAllUsers, getUserById } from "../controllers/user.js";
+import {
+  getAllUsers,
+  getUserById,
+  getCurrentUserBooksController,
+} from "../controllers/user.js";
 
 const router = express.Router();
 
@@ -77,5 +81,47 @@ router.get("/", getAllUsers);
 
 // TODO: Add authenticating token middleware once feature/auth is merged
 router.get("/:id", getUserById);
+
+/**
+ * @swagger
+ * /api/users/me/books:
+ *    get:
+ *       summary: Get books owned by the current user
+ *       description: Retrieves a list of all books associated with the currently authenticated user session.
+ *       responses:
+ *         200:
+ *           description: A list of books in the user's library.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   title:
+ *                     type: string
+ *                   author:
+ *                     type: string
+ *                   user_id:
+ *                     type: integer
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *         500:
+ *            description: Internal Server Error
+ */
+
+// MOCK AUTHENTICATION MIDDLEWARE PLACEHOLDER
+// TODO: Replace this with real JWT verification middleware once implemented
+const mockAuth = (req, res, next) => {
+  req.user = {
+    id: 1,
+  };
+  next();
+};
+
+router.get("/me/books", mockAuth, getCurrentUserBooksController);
 
 export default router;

@@ -5,7 +5,7 @@ function applyBookFilters(query, { search, category }) {
     query.where(function () {
       this.whereILike("Books.title", `%${search}%`).orWhereILike(
         "Books.description",
-        `%${search}%`,
+        `%${search}%`
       );
     });
   }
@@ -28,7 +28,7 @@ export function findAllBooks({ limit = 10, offset = 0, search, category }) {
       "Books.user_id",
       "Books.created_at",
       "Books.updated_at",
-      "Category.name as category_name",
+      "Category.name as category_name"
     );
   query = applyBookFilters(query, { search, category });
   return query.limit(Number(limit)).offset(Number(offset));
@@ -56,7 +56,7 @@ export function findBookById(id) {
       "Books.user_id",
       "Books.created_at",
       "Books.updated_at",
-      "Category.name as category_name",
+      "Category.name as category_name"
     )
     .where("Books.id", id)
     .first();
@@ -90,35 +90,31 @@ export async function createBook(bookData) {
 
 //UPDATE BOOK
 export async function updateBook(id, bookData) {
-  const [updatedBook] = await db("Books")
-    .where("id", id)
-    .update(
-      {
-        title: bookData.title,
-        description: bookData.description,
-        cover_url: bookData.cover_url,
-        condition: bookData.condition,
-        category_id: bookData.category_id,
-      },
-      [
-        "id",
-        "title",
-        "description",
-        "cover_url",
-        "condition",
-        "category_id",
-        "user_id",
-        "created_at",
-        "updated_at",
-      ]
-    );
+  const [updatedBook] = await db("Books").where("id", id).update(
+    {
+      title: bookData.title,
+      description: bookData.description,
+      cover_url: bookData.cover_url,
+      condition: bookData.condition,
+      category_id: bookData.category_id,
+    },
+    [
+      "id",
+      "title",
+      "description",
+      "cover_url",
+      "condition",
+      "category_id",
+      "user_id",
+      "created_at",
+      "updated_at",
+    ]
+  );
 
   return updatedBook;
 }
 
 //DELETE
 export async function deleteBook(id) {
-  return await db("Books")
-    .where("id", id)
-    .del();
+  return await db("Books").where("id", id).del();
 }
