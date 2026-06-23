@@ -1,9 +1,9 @@
 // import { BookModel } from "../models/bookModel.js";
-import { CategoryModel } from "../models/categoryModel.js";
+import { getAllCategories,getCategoryById,createCategory,deleteCategory } from "../models/categoryModel.js";
 
 export const getAll = async (req, res) => {
   try {
-    const data = await CategoryModel.getAll();
+    const data = await getAllCategories();
 
     res.status(200).json({
       success: true,
@@ -22,7 +22,7 @@ export const getAll = async (req, res) => {
 
 export const getOne = async (req, res) => {
   try {
-    const category = await CategoryModel.getById(req.params.id);
+    const category = await getCategoryById(req.params.id);
 
     if (!category) {
       return res.status(404).json({
@@ -48,6 +48,7 @@ export const getOne = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+
     const { name, description } = req.body;
 
     if (!name) {
@@ -57,7 +58,7 @@ export const create = async (req, res) => {
       });
     }
 
-    const [created] = await CategoryModel.create({
+    const [created] = await createCategory({
       name,
       description,
     });
@@ -77,9 +78,9 @@ export const create = async (req, res) => {
   }
 };
 
-export const deleteCategory = async (req, res) => {
+export const deleteCategory_ = async (req, res) => {
   try {
-    const category = await CategoryModel.getById(req.params.id);
+    const category = await getCategoryById(req.params.id);
 
     if (!category) {
       return res.status(404).json({
@@ -88,7 +89,7 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    await CategoryModel.delete(req.params.id);
+    await deleteCategory(req.params.id);
 
     res.status(200).json({
       success: true,
@@ -104,20 +105,3 @@ export const deleteCategory = async (req, res) => {
   }
 };
 
-// Benjina Paudyal (Dependency) so wait
-
-// export const getBooksByCategory = async (req, res) => {
-//   try {
-//     const category = await CategoryModel.getById(req.params.id);
-
-//     if (!category) {
-//       return res.status(404).json({ message: "Category not found" });
-//     }
-
-//     const books = await BookModel.getByCategory(req.params.id);
-
-//     res.json({ category, books });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };

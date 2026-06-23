@@ -3,14 +3,13 @@ import {
   getAll,
   getOne,
   create,
-  deleteCategory,
-//   getBooksByCategory,
+  deleteCategory_,
+
 } from "../controllers/categoryController.js";
 
-// import {
-//   authMiddleware,
-//   requireAdmin,
-// } from "../middleware/authMiddleware.js";
+import { validate } from "../middlewares/validateCategory.js";
+import { createCategorySchema } from "../validators/categorySchema.js";
+
 
 const router = express.Router();
 
@@ -81,7 +80,7 @@ router.get("/:id", getOne);
  *                 name: Technology
  *                 description: Tech, programming, and innovation
  */
-router.post("/", create);
+router.post("/", validate(createCategorySchema), create);
 
 /**
  * @swagger
@@ -105,7 +104,7 @@ router.post("/", create);
  *       404:
  *         description: Category not found
  */
-router.delete("/:id", deleteCategory);
+router.delete("/:id", deleteCategory_);
 
 // Benjina Paudyal (Dependency) so wait
 

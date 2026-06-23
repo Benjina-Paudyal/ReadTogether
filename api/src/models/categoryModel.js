@@ -1,33 +1,19 @@
 import connection from "../configs/knex-config.js";
-export const CategoryModel = {
-  getAll() {
-    return connection("Category").select("*");
-  },
 
-  getById(id) {
-    return connection("Category").where({ id }).first();
-  },
+export function getAllCategories() {
+  return connection("Category").select("*");
+}
 
-  create(data) {
-    return connection("Category").insert(data).returning("*");
-  },
+export function getCategoryById(id) {
+  return connection("Category").where({ id }).first();
+}
 
-  delete(id) {
-    return connection("Category").where({ id }).del();
-  },
-  
-};
+export function createCategory(data) {
+  return connection("Category").insert(data).returning("*");
+}
 
-// Benjina Paudyal (Dependency) so wait
+export function deleteCategory(id) {
+  return connection("Category").where({ id }).del();
+}
 
-// export const BookModel = {
-//   getAll() {
-//     return connection("books");
-//   },
 
-//   getByCategory(category_id) {
-//     return connection("books")
-//       .where({ category_id })
-//       .select("*");
-//   }
-// };
