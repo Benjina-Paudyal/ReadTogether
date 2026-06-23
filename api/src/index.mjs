@@ -9,6 +9,8 @@ import connection from "./configs/knex-config.js";
 import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
 
+import userRouter from "./routers/user.js";
+
 const app = express();
 
 // Middleware
@@ -32,7 +34,7 @@ apiRouter.get("/", async (req, res) => {
   }
 });
 
-
+apiRouter.use("/users", userRouter);
 
 app.use("/api", apiRouter);
 

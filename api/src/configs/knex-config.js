@@ -13,7 +13,7 @@ export function createKnexConfig() {
       ssl: { rejectUnauthorized: false },
     },
 
-        migrations: {
+    migrations: {
       directory: "./src/db/migrations",
       loadExtensions: [".js"],
     },
