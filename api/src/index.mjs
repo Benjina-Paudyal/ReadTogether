@@ -10,6 +10,8 @@ import bookRoutes from "./routers/book.js";
 import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
 
+import userRouter from "./routers/user.js";
+
 const app = express();
 
 // Middleware
@@ -32,6 +34,8 @@ apiRouter.get("/", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+apiRouter.use("/users", userRouter);
 
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
