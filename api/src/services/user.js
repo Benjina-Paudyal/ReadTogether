@@ -1,3 +1,6 @@
+// TODO: Refactor to modular exports once the service/model migration is completed.
+// Replace object-based export with direct function exports.
+
 import { BcryptService } from "./encryption.js";
 import { createUser, findUserByEmail } from "../models/user.js";
 
