@@ -1,7 +1,30 @@
 import connection from "../configs/knex-config.js";
 
+// Get all users
+export const findAllUsers = async () => {
+  return await connection("Users").select(
+    "id",
+    "name",
+    "email",
+    "location",
+    "created_at"
+  );
+};
+
+// Find a specific user by ID
+export const findUserById = async (id) => {
+  return await connection("Users")
+    .where({ id })
+    .select("id", "name", "email", "location", "created_at")
+    .first();
+};
+
+// Get user by email (Kept for internal use by Auth/Registration workflows)
 export const findUserByEmail = async (email) => {
-  return await connection("Users").where({ email }).first(); // Returns the user record if found, or undefined
+  return await connection("Users")
+    .where({ email })
+    .select("id", "name", "email", "location", "created_at")
+    .first();
 };
 
 // Insert a new user into the database

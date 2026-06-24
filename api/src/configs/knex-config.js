@@ -1,6 +1,8 @@
 import knex from "knex";
 import "dotenv/config";
 
+const isProductionDB = process.env.DB_ENV === "production";
+
 export function createKnexConfig() {
   return {
     client: "pg",
@@ -10,7 +12,10 @@ export function createKnexConfig() {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       port: Number(process.env.DB_PORT || 5432),
-      ssl: { rejectUnauthorized: false },
+
+      ssl: isProductionDB
+        ? { rejectUnauthorized: false }
+        : false,
     },
 
     migrations: {
