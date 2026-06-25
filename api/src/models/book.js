@@ -124,19 +124,3 @@ export async function deleteBook(id) {
 export const findBooksByUserId = async (userId) => {
   return await connection("Books").where({ user_id: userId }).select("*");
 };
-
-// Fetch all books borrowed by a specific user
-export const findBorrowedBooksByUserId = async (userId) => {
-  return await connection("Rentals")
-    .join("Books", "Rentals.book_id", "=", "Books.id")
-    .where("Rentals.borrower_id", userId)
-    .andWhere("Rentals.status", RENTAL_STATUS.RENTED)
-    .select("Books.*");
-};
-
-// Fetch rental records for service layer mapping
-export const findActiveRentalsByBorrowerId = async (userId) => {
-  return await connection("Rentals")
-    .where({ borrower_id: userId, status: RENTAL_STATUS.RENTED })
-    .select("id as rental_id", "book_id", "status", "due_date");
-};

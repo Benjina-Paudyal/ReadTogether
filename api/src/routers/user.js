@@ -159,34 +159,37 @@ router.get("/me/books", mockAuth, getCurrentUserBooksController);
 /**
  * @swagger
  * /users/me/borrowed:
- *    get:
- *       summary: Get books currently borrowed by the user
- *       description: Retrieves list of all active rentals that are currently checked out by the logged-in user.
- *       responses:
- *         200:
- *            description: A list of actively borrowed books.
- *            content:
- *              application/json:
- *                schema:
- *                  type: array
- *                items:
- *                  type: object
- *                properties:
- *                  book_id:
- *                    type: integer
- *                  title:
- *                    type: string
- *                  description:
- *                    type: string
- *                  rental_id:
- *                    type: integer
- *                  status:
- *                    type: string
- *                  due_date:
- *                    type: string
- *                  format: date
- *         500:
- *            description: Internal Server Error
+ *   get:
+ *     summary: Get books currently borrowed by the user
+ *     description: Retrieves list of all active rentals that are currently checked out by the logged-in user.
+ *     responses:
+ *       200:
+ *         description: A list of actively borrowed books.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   rental_id:
+ *                     type: integer
+ *                   status:
+ *                     type: string
+ *                   due_date:
+ *                     type: string
+ *                     format: date
+ *                   book:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *       500:
+ *             description: Internal Server Error
  */
 
 router.get("/me/borrowed", mockAuth, getCurrentUserBorrowedController);

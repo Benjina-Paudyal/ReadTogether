@@ -1,8 +1,5 @@
-import {
-  findBooksByUserId,
-  findBorrowedBooksByUserId,
-  findActiveRentalsByBorrowerId,
-} from "../models/book.js";
+import { findBooksByUserId } from "../models/book.js";
+import { findActiveRentalsWithBooksByBorrowerId } from "../models/rental.js";
 
 import { BcryptService } from "./encryption.js";
 import { createUser, findUserByEmail } from "../models/user.js";
@@ -12,20 +9,19 @@ export const getCurrentUserBooks = async (userId) => {
 };
 
 export const getCurrentUserBorrowedBooks = async (userId) => {
-  const books = await findBorrowedBooksByUserId(userId);
-  const rentals = await findActiveRentalsByBorrowerId(userId);
-  return books.map((book) => {
-    const matchingRental = rentals.find((r) => r.book_id === book.id);
-    return {
-      book_id: book.id,
-      title: book.title,
-      description: book.description,
-      rental_id: matchingRental ? matchingRental.rental_id : null,
-      status: matchingRental ? matchingRental.status : null,
-      due_date: matchingRental ? matchingRental.due_date : null,
-    };
-  });
+  const activeRentals = await findActiveRentalsWithBooksByBorrowerId(userId);
+  return activeRentals.map((rental) => ({
+    rental_id: rental.rental_id,
+    status: rental.status,
+    due_date: rental.due_date,
+    book: {
+      id: rental.book_id,
+      title: rental.title,
+      description: rental.description,
+    },
+  }));
 };
+
 // TODO: Refactor to modular exports once the service/model migration is completed.
 // Replace object-based export with direct function exports.
 
