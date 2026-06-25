@@ -25,8 +25,11 @@ export const findRentalWithOwnerAndBook = async (rentalId) => {
 
 // Updates the rental status cleanly
 export const updateRentalStatus = async (rentalId, status) => {
-  return await connection("Rentals").where({ id: rentalId }).update({
-    status: status,
-    updated_at: connection.fn.now(),
-  });
+  return await connection("Rentals")
+    .where({ id: rentalId })
+    .update({
+      status: status,
+      updated_at: connection.fn.now(),
+    })
+    .returning(["id", "book_id", "status", "updated_at"]);
 };

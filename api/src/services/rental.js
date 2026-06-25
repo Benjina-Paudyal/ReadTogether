@@ -2,6 +2,7 @@ import {
   findRentalWithOwnerAndBook,
   updateRentalStatus,
 } from "../models/rental.js";
+import { RENTAL_STATUS } from "../constants/rentalStatuses.js";
 
 export const handoverBook = async (rentalId, loggedInUserId) => {
   const rental = await findRentalWithOwnerAndBook(rentalId);
@@ -21,8 +22,8 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  // Status Validation: Must be approved first
-  if (rental.status !== "approved") {
+  // Status Validation: Ensure the rental has been approved before handover
+  if (rental.status !== RENTAL_STATUS.APPROVED) {
     const error = new Error(
       `Cannot handover a book with a rental status of '${rental.status}'.`
     );
@@ -30,7 +31,7 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  await updateRentalStatus(rentalId, "rented");
+  await updateRentalStatus(rentalId, RENTAL_STATUS.RENTED);
 
   return {
     message: "Book handover successfully confirmed. Rental is now active.",
