@@ -3,14 +3,13 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
+import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
 import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
-
-import userRouter from "./routers/user.js";
 
 const app = express();
 

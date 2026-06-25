@@ -26,3 +26,12 @@ export const findUserByEmail = async (email) => {
     .select("id", "name", "email", "location", "created_at")
     .first();
 };
+
+// Insert a new user into the database
+export const createUser = async (userData) => {
+  const [newUser] = await connection("Users")
+    .insert(userData)
+    .returning(["id", "name", "email", "location", "created_at"]);
+
+  return newUser;
+};
