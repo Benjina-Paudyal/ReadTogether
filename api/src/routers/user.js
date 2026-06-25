@@ -12,7 +12,7 @@ const router = express.Router();
 /**
  * @swagger
  * /users/register:
- *    post:
+ * post:
  *      summary: Register a new user account
  *      description: Creates a new user profile with a hashed password.
  *      requestBody:
@@ -27,7 +27,7 @@ const router = express.Router();
  *              email: { type: string }
  *              password: { type: string }
  *              location: { type: string }
- *     responses:
+ *      responses:
  *       201:
  *         description: Account created successfully.
  *       400:
@@ -45,11 +45,11 @@ router.post("/register", registerUser);
  *    get:
  *      summary: Retrieve a list of all users
  *      description: Fetches all user profiles from the database, omitting sensitive password data.
- *    responses:
- *      200:
- *        description: A list of user profiles.
- *        content:
- *          application/json:
+ *      responses:
+ *        200:
+ *          description: A list of user profiles.
+ *          content:
+ *            application/json:
  *            schema:
  *              type: array
  *              items:
@@ -66,7 +66,7 @@ router.post("/register", registerUser);
  *                  created_at:
  *                    type: string
  *                    format: date-time
- *       500:
+ *        500:
  *         description: Internal Server Error
  */
 
@@ -105,9 +105,9 @@ router.get("/", getAllUsers);
  *               created_at:
  *                 type: string
  *               format: date-time
- *       404:
+ *      404:
  *         description: User not found.
- *       500:
+ *      500:
  *         description: Internal Server Error
  */
 
