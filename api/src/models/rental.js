@@ -1,9 +1,8 @@
-import db from "../configs/knex-config.js";
 import connection from "../configs/knex-config.js";
 
 // AVAILABILITY CHECK
 export function findActiveRentalByBookId(bookId) {
-  return db("Rentals")
+  return connection("Rentals")
     .where("book_id", bookId)
     .whereIn("status", ["requested", "approved", "active"])
     .first();
@@ -11,7 +10,7 @@ export function findActiveRentalByBookId(bookId) {
 
 // Finds a rental and joins the book to find the book's owner
 export const findRentalWithOwnerAndBook = async (rentalId) => {
-  return await db("Rentals")
+  return await connection("Rentals")
     .join("Books", "Rentals.book_id", "=", "Books.id")
     .where("Rentals.id", rentalId)
     .select(
