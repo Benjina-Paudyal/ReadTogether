@@ -132,7 +132,18 @@ router.get("/:id", getBookById);
  *                     type: object
  */
 // POST /books
-router.post("/", createBook);
+// router.post("/", createBook);
+
+//// Temporary mock auth for Swagger demo (to be replaced with JWT middleware)
+router.post(
+  "/",
+  (req, res, next) => {
+    // mock auth for Swagger demo
+    req.user = { id: Number(req.body.user_id) || 1 };
+    next();
+  },
+  createBook
+);
 
 
 /**
