@@ -10,7 +10,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *    get:
  *      summary: Retrieve a list of all users
  *      description: Fetches all user profiles from the database, omitting sensitive password data.
@@ -44,7 +44,7 @@ router.get("/", getAllUsers);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *    get:
  *       summary: Get user details by ID
  *       description: Retrieves profile details for a specific user using their unique ID.
@@ -85,7 +85,7 @@ router.get("/:id", getUserById);
 
 /**
  * @swagger
- * /api/users/me/books:
+ * /users/me/books:
  *    get:
  *       summary: Get books owned by the current user
  *       description: Retrieves a list of all books associated with the currently authenticated user session.
@@ -127,7 +127,7 @@ router.get("/me/books", mockAuth, getCurrentUserBooksController);
 
 /**
  * @swagger
- * /api/users/me/borrowed:
+ * /users/me/borrowed:
  *    get:
  *       summary: Get books currently borrowed by the user
  *       description: Retrieves list of all active rentals that are currently checked out by the logged-in user.
@@ -159,5 +159,7 @@ router.get("/me/books", mockAuth, getCurrentUserBooksController);
  */
 
 router.get("/me/borrowed", mockAuth, getCurrentUserBorrowedController);
+
+// TODO: Future Extension - Add GET /api/users/:id/books and GET /api/users/:id/borrowed to allow admin to view other profiles' libraries.
 
 export default router;
