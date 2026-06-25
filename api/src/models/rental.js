@@ -1,12 +1,15 @@
-import db from "../configs/knex-config.js";
 import connection from "../configs/knex-config.js";
 import { RENTAL_STATUS } from "../constants/rentalStatuses.js";
 
 // AVAILABILITY CHECK
 export function findActiveRentalByBookId(bookId) {
-  return db("Rentals")
+  return connection("Rentals")
     .where("book_id", bookId)
-    .whereIn("status", ["requested", "approved", "active"])
+    .whereIn("status", [
+      RENTAL_STATUS.REQUESTED,
+      RENTAL_STATUS.APPROVED,
+      RENTAL_STATUS.RENTED,
+    ])
     .first();
 }
 
