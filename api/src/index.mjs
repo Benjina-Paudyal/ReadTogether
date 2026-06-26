@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
+import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
 import rentalRouter from "./routers/rentals.js";
 
@@ -10,8 +11,6 @@ import rentalRouter from "./routers/rentals.js";
 // import swaggerSpec from "./swagger.js";
 import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
-
-import userRouter from "./routers/user.js";
 
 const app = express();
 
@@ -26,7 +25,7 @@ const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
 // Example route to check DB
-apiRouter.get("/", async (req, res) => {
+/* apiRouter.get("/", async (req, res) => {
   try {
     const data = await connection("practise_table"); // table must exist in DB
     res.json(data);
@@ -34,7 +33,7 @@ apiRouter.get("/", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-});
+}); */
 
 apiRouter.use("/users", userRouter);
 

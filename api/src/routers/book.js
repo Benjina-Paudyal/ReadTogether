@@ -19,7 +19,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/books:
+ * /books:
  *   get:
  *     summary: Get all books
  *     tags: [Books]
@@ -31,12 +31,12 @@ const router = express.Router();
  *             schema:
  *               type: object
  */
-// GET /api/books
+// GET /books
 router.get("/", getBooks);
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   get:
  *     summary: Get book by ID
  *     tags: [Books]
@@ -52,13 +52,13 @@ router.get("/", getBooks);
  *       404:
  *         description: Book not found
  */
-// GET /api/books/:id
+// GET /books/:id
 router.get("/:id", getBookById);
 
 
 /**
  * @swagger
- * /api/books:
+ * /books:
  *   post:
  *     summary: Create a new book
  *     tags: [Books]
@@ -117,13 +117,38 @@ router.get("/:id", getBookById);
  *                   type: string
  *                 updated_at:
  *                   type: string
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
  */
-// POST /api/books
-router.post("/", createBook);
+// POST /books
+// router.post("/", createBook);
+
+//// Temporary mock auth for Swagger demo (to be replaced with JWT middleware)
+router.post(
+  "/",
+  (req, res, next) => {
+    // mock auth for Swagger demo
+    req.user = { id: Number(req.body.user_id) || 1 };
+    next();
+  },
+  createBook
+);
+
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   put:
  *     summary: Update a book
  *     tags: [Books]
@@ -141,15 +166,32 @@ router.post("/", createBook);
  *             type: object
  *     responses:
  *       200:
- *         description: Book updated
+ *         description: Book updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       404:
+ *         description: Book not found
  */
-// PUT /api/books/:id 
 router.put("/:id", updateBook);
-
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /books/{id}:
  *   delete:
  *     summary: Delete a book
  *     tags: [Books]
@@ -161,14 +203,22 @@ router.put("/:id", updateBook);
  *           type: integer
  *     responses:
  *       200:
- *         description: Book deleted
+ *         description: Book deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Book not found
  */
-// DELETE /api/books/:id
 router.delete("/:id", deleteBook);
 
 /**
  * @swagger
- * /api/books/{id}/availability:
+ * /books/{id}/availability:
  *   get:
  *     summary: Check book availability
  *     tags: [Books]
@@ -192,8 +242,9 @@ router.delete("/:id", deleteBook);
  *                   type: boolean
  *                 status:
  *                   type: string
+ *       404:
+ *         description: Book not found
  */
-// GET /api/books/:id/availability
-router.get("/:id/availability", getAvailability)
+router.get("/:id/availability", getAvailability);
 
 export default router;

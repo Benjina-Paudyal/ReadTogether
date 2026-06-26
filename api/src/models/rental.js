@@ -55,3 +55,19 @@ export const createRentalRequest = async (rentalData) => {
       .returning(["id", "book_id", "borrower_id", "status", "request_date"])
   )[0];
 };
+
+// Fetch active rentals along with their book details using a single SQL join
+export const findActiveRentalsWithBooksByBorrowerId = async (userId) => {
+  return await connection("Rentals")
+    .join("Books", "Rentals.book_id", "=", "Books.id")
+    .where("Rentals.borrower_id", userId)
+    .andWhere("Rentals.status", RENTAL_STATUS.RENTED)
+    .select(
+      "Rentals.id as rental_id",
+      "Rentals.status",
+      "Rentals.due_date",
+      "Books.id as book_id",
+      "Books.title",
+      "Books.description"
+    );
+};
