@@ -2,6 +2,7 @@ import express from "express";
 import {
   createRentalController,
   handoverBookController,
+  acceptRentalController,
 } from "../controllers/rental.js";
 
 const router = express.Router();
@@ -65,6 +66,44 @@ const mockAuth = (req, res, next) => {
 
 // TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
 router.post("/", mockAuth, createRentalController);
+
+/**
+ * @swagger
+ * /api/rentals/{id}/accept:
+ *   patch:
+ *     summary: Accept a rental request
+ *     description: Allows the book owner to accept an incoming rental request. Verifies ownership via token identity, checks that the current state is 'REQUESTED', and transitions the state to 'APPROVED'.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The unique identifier of the rental record
+ *     responses:
+ *       200:
+ *         description: Rental request accepted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Bad Request - Rental is not in a 'REQUESTED' state.
+ *       403:
+ *         description: Forbidden - Only the book owner is authorized to accept requests.
+ *       404:
+ *         description: Not Found - Rental record not found.
+ *       500:
+ *         description: Internal Server Error
+ */
+
+// TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
+router.patch("/:id/accept", mockAuth, acceptRentalController);
 
 /**
  * @swagger

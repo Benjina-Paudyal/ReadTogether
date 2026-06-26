@@ -32,6 +32,45 @@ export const requestBook = async (bookId, borrowerId) => {
   };
 };
 
+//Validates ownership and current state before accepting a rental request.
+export const acceptRentalRequest = async (rentalId, loggedInUserId) => {
+  const rental = await findRentalWithOwnerAndBook(rentalId);
+
+  if (!rental) {
+    const error = new Error("Rental record not found.");
+    error.status = 404;
+    throw error;
+  }
+
+  //Fraud Prevention: Only the book owner can accept rental requests
+  if (rental.owner_id !== loggedInUserId) {
+    const error = new Error(
+      "Unauthorized. Only the book owner can accept rental requests."
+    );
+    error.status = 403;
+    throw error;
+  }
+
+  //Status Validation
+  if (rental.status !== RENTAL_STATUS.REQUESTED) {
+    const error = new Error(
+      `Cannot accept a rental request that is currently '${rental.status}'.`
+    );
+    error.status = 400;
+    throw error;
+  }
+
+  const updatedRental = await updateRentalStatus(
+    rentalId,
+    RENTAL_STATUS.APPROVED
+  );
+
+  return {
+    message: "Rental request accepted successfully.",
+    data: updatedRental,
+  };
+};
+
 //Process a book handover
 export const handoverBook = async (rentalId, loggedInUserId) => {
   const rental = await findRentalWithOwnerAndBook(rentalId);
@@ -60,9 +99,13 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  await updateRentalStatus(rentalId, RENTAL_STATUS.RENTED);
+  const updatedRental = await updateRentalStatus(
+    rentalId,
+    RENTAL_STATUS.RENTED
+  );
 
   return {
     message: "Book handover successfully confirmed. Rental is now active.",
+    data: updatedRental,
   };
 };

@@ -1,4 +1,8 @@
-import { handoverBook, requestBook } from "../services/rental.js";
+import {
+  handoverBook,
+  requestBook,
+  acceptRentalRequest,
+} from "../services/rental.js";
 
 export const createRentalController = async (req, res) => {
   try {
@@ -12,7 +16,7 @@ export const createRentalController = async (req, res) => {
       });
     }
 
-    const result = await requestBookRental(book_id, borrowerId);
+    const result = await requestBook(book_id, borrowerId);
     return res.status(201).json(result);
   } catch (error) {
     console.error("Create Rental Controller Error:", error);
@@ -21,6 +25,31 @@ export const createRentalController = async (req, res) => {
       message:
         error.message ||
         "An error occurred while submitting your rental request.",
+    });
+  }
+};
+
+export const acceptRentalController = async (req, res) => {
+  try {
+    const rentalId = req.params.id;
+    const loggedInUserId = req.user.id;
+
+    const result = await acceptRentalRequest(rentalId, loggedInUserId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Accept Rental Controller Error:", error);
+    return res.status(error.status || 500).json({
+      error:
+        error.status === 403
+          ? "Forbidden"
+          : error.status === 404
+            ? "Not Found"
+            : error.status === 400
+              ? "Bad Request"
+              : "Internal Server Error",
+      message:
+        error.message ||
+        "An error occurred while accepting the rental request.",
     });
   }
 };

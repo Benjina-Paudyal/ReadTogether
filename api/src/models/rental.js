@@ -1,10 +1,15 @@
 import connection from "../configs/knex-config.js";
+import { RENTAL_STATUS } from "../constants/rentalStatuses.js";
 
 // AVAILABILITY CHECK
 export function findActiveRentalByBookId(bookId) {
   return connection("Rentals")
     .where("book_id", bookId)
-    .whereIn("status", ["requested", "approved", "active"])
+    .whereIn("status", [
+      RENTAL_STATUS.REQUESTED,
+      RENTAL_STATUS.APPROVED,
+      RENTAL_STATUS.RENTED,
+    ])
     .first();
 }
 
@@ -24,13 +29,15 @@ export const findRentalWithOwnerAndBook = async (rentalId) => {
 
 // Updates the rental status cleanly
 export const updateRentalStatus = async (rentalId, status) => {
-  return await connection("Rentals")
-    .where({ id: rentalId })
-    .update({
-      status: status,
-      updated_at: connection.fn.now(),
-    })
-    .returning(["id", "book_id", "status", "updated_at"]);
+  return (
+    await connection("Rentals")
+      .where({ id: rentalId })
+      .update({
+        status: status,
+        updated_at: connection.fn.now(),
+      })
+      .returning(["id", "book_id", "borrower_id", "status", "updated_at"])
+  )[0];
 };
 
 //Creates a new rental request record in the database.
