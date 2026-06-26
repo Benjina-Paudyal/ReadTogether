@@ -1,8 +1,29 @@
-// TODO: Refactor to modular exports once the service/model migration is completed.
-// Replace object-based export with direct function exports.
+import { findBooksByUserId } from "../models/book.js";
+import { findActiveRentalsWithBooksByBorrowerId } from "../models/rental.js";
 
 import { BcryptService } from "./encryption.js";
 import { createUser, findUserByEmail } from "../models/user.js";
+
+export const getCurrentUserBooks = async (userId) => {
+  return await findBooksByUserId(userId);
+};
+
+export const getCurrentUserBorrowedBooks = async (userId) => {
+  const activeRentals = await findActiveRentalsWithBooksByBorrowerId(userId);
+  return activeRentals.map((rental) => ({
+    rental_id: rental.rental_id,
+    status: rental.status,
+    due_date: rental.due_date,
+    book: {
+      id: rental.book_id,
+      title: rental.title,
+      description: rental.description,
+    },
+  }));
+};
+
+// TODO: Refactor to modular exports once the service/model migration is completed.
+// Replace object-based export with direct function exports.
 
 export const createNewUser = async (name, email, password, location) => {
   const sanitizedEmail = email.toLowerCase().trim();

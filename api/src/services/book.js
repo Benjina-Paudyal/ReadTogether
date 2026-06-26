@@ -72,7 +72,6 @@ export async function deleteBook(id) {
   return { message: "Book deleted successfully" };
 }
 
-
 export async function checkBookAvailability(id) {
   const book = await findBookById(id);
   if (!book) {
@@ -85,3 +84,9 @@ export async function checkBookAvailability(id) {
     status: rental ? rental.status : "available",
   };
 }
+
+export const getCurrentUserBooksService = async (userId) => {
+  // Business rules could go here (e.g., sorting, filtering, checking user status)
+  const userBooks = await findBooksByUserId(userId);
+  return userBooks;
+};

@@ -24,7 +24,7 @@ const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
 // Example route to check DB
-apiRouter.get("/", async (req, res) => {
+/* apiRouter.get("/", async (req, res) => {
   try {
     const data = await connection("practise_table"); // table must exist in DB
     res.json(data);
@@ -32,7 +32,7 @@ apiRouter.get("/", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-});
+}); */
 
 apiRouter.use("/users", userRouter);
 

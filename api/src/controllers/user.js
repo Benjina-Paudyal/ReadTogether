@@ -1,6 +1,10 @@
 import { createNewUser } from "../services/user.js";
 import { registerUserSchema } from "../validators/user.js";
 import { findAllUsers, findUserById } from "../models/user.js";
+import {
+  getCurrentUserBooks,
+  getCurrentUserBorrowedBooks,
+} from "../services/user.js";
 
 // A. Register User Controller
 export const registerUser = async (req, res) => {
@@ -70,5 +74,38 @@ export const getUserById = async (req, res) => {
   } catch (error) {
     console.error("Get User By ID Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getCurrentUserBooksController = async (req, res) => {
+  try {
+    // Handles /me and future admin endpoints
+    const userId = req.params.id || req.user.id;
+    const books = await getCurrentUserBooks(userId);
+
+    return res.status(200).json(books);
+  } catch (error) {
+    console.error("Get Books Error:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "Failed to retrieve your library.",
+    });
+  }
+};
+
+export const getCurrentUserBorrowedController = async (req, res) => {
+  try {
+    // Handles /me and future admin endpoints
+    const userId = req.params.id || req.user.id;
+
+    const borrowedBooks = await getCurrentUserBorrowedBooks(userId);
+
+    return res.status(200).json(borrowedBooks);
+  } catch (error) {
+    console.error("Get Borrowed Books Controller Error:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An error occurred while fetching your borrowed books.",
+    });
   }
 };
