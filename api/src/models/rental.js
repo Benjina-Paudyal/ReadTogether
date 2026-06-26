@@ -32,3 +32,19 @@ export const updateRentalStatus = async (rentalId, status) => {
     })
     .returning(["id", "book_id", "status", "updated_at"]);
 };
+
+//Creates a new rental request record in the database.
+export const createRentalRequest = async (rentalData) => {
+  return (
+    await connection("Rentals")
+      .insert({
+        book_id: rentalData.book_id,
+        borrower_id: rentalData.borrower_id,
+        status: rentalData.status,
+        request_date: connection.fn.now(),
+        created_at: connection.fn.now(),
+        updated_at: connection.fn.now(),
+      })
+      .returning(["id", "book_id", "borrower_id", "status", "request_date"])
+  )[0];
+};

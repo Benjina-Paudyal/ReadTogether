@@ -1,9 +1,38 @@
 import {
+  findActiveRentalByBookId,
+  createRentalRequest,
   findRentalWithOwnerAndBook,
   updateRentalStatus,
 } from "../models/rental.js";
 import { RENTAL_STATUS } from "../constants/rentalStatuses.js";
 
+//Processes a new book rental request after validating availability
+export const requestBook = async (bookId, borrowerId) => {
+  const activeRental = await findActiveRentalByBookId(bookId);
+
+  if (activeRental) {
+    const error = new Error(
+      "The requested book is currently unavailable for rent."
+    );
+    error.status = 400;
+    throw error;
+  }
+
+  //Create the Rental Request: Insert with unified uppercase constant
+  const newRental = await createRentalRequest({
+    book_id: bookId,
+    borrower_id: borrowerId,
+    status: RENTAL_STATUS.REQUESTED,
+  });
+
+  return {
+    message:
+      "Rental request submitted successfully. Waiting for owner approval.",
+    data: newRental,
+  };
+};
+
+//Process a book handover
 export const handoverBook = async (rentalId, loggedInUserId) => {
   const rental = await findRentalWithOwnerAndBook(rentalId);
 
