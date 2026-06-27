@@ -1,25 +1,24 @@
-import {
-  handoverBook,
-  requestBook,
-  acceptRentalRequest,
-} from "../services/rental.js";
+import { createRentalSchema } from "../validators/rentals.js";
 
-export const createRentalController = async (req, res) => {
+export const createRental = async (req, res) => {
   try {
-    const { book_id } = req.body;
+    const validatedBody = createRentalSchema.parse(req.body);
+    const { book_id } = validatedBody;
+
     const borrowerId = req.user.id;
 
-    if (!book_id) {
-      return res.status(400).json({
-        error: "Bad Request",
-        message: "Missing required field: book_id",
-      });
-    }
-
-    const result = await requestBook(book_id, borrowerId);
+    const result = await RentalService.requestBook(book_id, borrowerId);
     return res.status(201).json(result);
   } catch (error) {
     console.error("Create Rental Controller Error:", error);
+
+    if (error.name === "ZodError") {
+      return res.status(400).json({
+        error: "Bad Request",
+        message: error.errors[0].message,
+      });
+    }
+
     return res.status(error.status || 500).json({
       error: error.status === 400 ? "Bad Request" : "Internal Server Error",
       message:
@@ -29,12 +28,15 @@ export const createRentalController = async (req, res) => {
   }
 };
 
-export const acceptRentalController = async (req, res) => {
+export const acceptRental = async (req, res) => {
   try {
     const rentalId = req.params.id;
     const loggedInUserId = req.user.id;
 
-    const result = await acceptRentalRequest(rentalId, loggedInUserId);
+    const result = await RentalService.acceptRentalRequest(
+      rentalId,
+      loggedInUserId
+    );
     return res.status(200).json(result);
   } catch (error) {
     console.error("Accept Rental Controller Error:", error);
@@ -54,12 +56,12 @@ export const acceptRentalController = async (req, res) => {
   }
 };
 
-export const handoverBookController = async (req, res) => {
+export const handoverBook = async (req, res) => {
   try {
     const rentalId = req.params.id;
     const loggedInUserId = req.user.id;
 
-    const result = await handoverBook(rentalId, loggedInUserId);
+    const result = await RentalService.handoverBook(rentalId, loggedInUserId);
     return res.status(200).json(result);
   } catch (error) {
     console.error("Handover Controller Error:", error);

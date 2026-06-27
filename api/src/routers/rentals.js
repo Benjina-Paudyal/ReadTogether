@@ -1,9 +1,5 @@
 import express from "express";
-import {
-  createRentalController,
-  handoverBookController,
-  acceptRentalController,
-} from "../controllers/rental.js";
+import * as RentalController from "../controllers/rental.js";
 
 const router = express.Router();
 
@@ -65,7 +61,7 @@ const mockAuth = (req, res, next) => {
  */
 
 // TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.post("/", mockAuth, createRentalController);
+router.post("/", mockAuth, RentalController.createRental);
 
 /**
  * @swagger
@@ -103,7 +99,7 @@ router.post("/", mockAuth, createRentalController);
  */
 
 // TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.patch("/:id/accept", mockAuth, acceptRentalController);
+router.patch("/:id/accept", mockAuth, RentalController.acceptRental);
 
 /**
  * @swagger
@@ -139,6 +135,6 @@ router.patch("/:id/accept", mockAuth, acceptRentalController);
  */
 
 // TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.patch("/:id/handover", mockAuth, handoverBookController);
+router.patch("/:id/handover", mockAuth, RentalController.handoverBook);
 
 export default router;
