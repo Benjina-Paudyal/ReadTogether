@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
 import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
+import rentalRouter from "./routers/rentals.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
@@ -38,6 +39,7 @@ apiRouter.use("/users", userRouter);
 
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
+app.use("/api/rentals", rentalRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
