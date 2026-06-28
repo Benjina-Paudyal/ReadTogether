@@ -72,18 +72,21 @@ export async function deleteBook(id) {
   return { message: "Book deleted successfully" };
 }
 
+// BOOK AVAILABILITY CHECK
 export async function checkBookAvailability(id) {
   const book = await findBookById(id);
-  if (!book) {
-    throw new Error("BOOK_NOT_FOUND");
-  }
+  if (!book) throw new Error("BOOK_NOT_FOUND");
+
   const rental = await findActiveRentalByBookId(id);
+
   return {
     bookId: book.id,
-    available: rental ? false : true,
-    status: rental ? rental.status : "available",
+    available: !rental,
+    rentalStatus: rental?.status ?? null,
   };
 }
+
+
 
 export const getCurrentUserBooksService = async (userId) => {
   // Business rules could go here (e.g., sorting, filtering, checking user status)
