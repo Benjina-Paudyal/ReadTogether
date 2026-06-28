@@ -1,5 +1,11 @@
-import { findCategoryByName, insertCategory } from "../models/category.js";
+import {
+  findCategoryByName,
+  insertCategory,
+  getAllCategories,
+  getCategoryById,
+} from "../models/category.js";
 
+// CREATE
 export async function createCategoryService(data) {
   const existing = await findCategoryByName(data.name);
 
@@ -7,10 +13,16 @@ export async function createCategoryService(data) {
     throw new Error("CATEGORY_EXISTS");
   }
 
-  await insertCategory(data);
+  const [category] = await insertCategory(data);
+  return category;
+}
 
-  return {
-    message: "Category created successfully",
-    name: data.name,
-  };
+// GET ALL
+export async function getAllCategoriesService() {
+  return await getAllCategories();
+}
+
+// GET BY ID
+export async function getCategoryByIdService(id) {
+  return await getCategoryById(id);
 }
