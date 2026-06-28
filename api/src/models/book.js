@@ -18,7 +18,7 @@ function applyBookFilters(query, { search, category }) {
 
 // GET ALL BOOKS
 export function findAllBooks({ limit = 10, offset = 0, search, category }) {
-  let query = db("Books")
+  let query = connection("Books")
     .leftJoin("Category", "Books.category_id", "Category.id")
     .select(
       "Books.id",
@@ -37,7 +37,7 @@ export function findAllBooks({ limit = 10, offset = 0, search, category }) {
 
 // COUNT (for pagination)
 export function countAllBooks({ search, category }) {
-  let query = db("Books")
+  let query = connection("Books")
     .leftJoin("Category", "Books.category_id", "Category.id")
     .count("Books.id as total");
   query = applyBookFilters(query, { search, category });
@@ -46,7 +46,7 @@ export function countAllBooks({ search, category }) {
 
 // GET BOOK BY ID
 export function findBookById(id) {
-  return db("Books")
+  return connection("Books")
     .leftJoin("Category", "Books.category_id", "Category.id")
     .select(
       "Books.id",
@@ -65,7 +65,7 @@ export function findBookById(id) {
 
 // CREATE BOOK
 export async function createBook(bookData) {
-  const [newBook] = await db("Books")
+  const [newBook] = await connection("Books")
     .insert({
       title: bookData.title,
       description: bookData.description,
@@ -91,7 +91,7 @@ export async function createBook(bookData) {
 
 //UPDATE BOOK
 export async function updateBook(id, bookData) {
-  const [updatedBook] = await db("Books").where("id", id).update(
+  const [updatedBook] = await connection("Books").where("id", id).update(
     {
       title: bookData.title,
       description: bookData.description,
@@ -117,7 +117,7 @@ export async function updateBook(id, bookData) {
 
 //DELETE
 export async function deleteBook(id) {
-  return await db("Books").where("id", id).del();
+  return await connection("Books").where("id", id).del();
 }
 
 //Fetch all books belonging to a specific user from the Books table
