@@ -13,6 +13,8 @@ const router = express.Router();
  * @swagger
  * /users/register:
  *   post:
+ *     tags:
+ *       - Users
  *     summary: Register a new user account
  *     description: Creates a new user profile with a hashed password.
  *     requestBody:
@@ -51,6 +53,8 @@ router.post("/register", registerUser);
  * @swagger
  * /users:
  *   get:
+ *     tags:
+ *       - Users
  *     summary: Retrieve a list of all users
  *     description: Fetches all user profiles from the database, omitting sensitive password data.
  *     responses:
@@ -85,6 +89,8 @@ router.get("/", getAllUsers);
  * @swagger
  * /users/{id}:
  *   get:
+ *     tags:
+ *       - Users
  *     summary: Get user details by ID
  *     description: Retrieves profile details for a specific user using their unique ID.
  *     parameters:
@@ -126,6 +132,8 @@ router.get("/:id", getUserById);
  * @swagger
  * /users/me/books:
  *   get:
+ *     tags:
+ *       - Users
  *     summary: Get books owned by the current user
  *     description: Retrieves a list of all books associated with the currently authenticated user session.
  *     responses:
@@ -168,6 +176,8 @@ router.get("/me/books", mockAuth, getCurrentUserBooksController);
  * @swagger
  * /users/me/borrowed:
  *   get:
+ *     tags:
+ *       - Users
  *     summary: Get books currently borrowed by the user
  *     description: Retrieves list of all active rentals that are currently checked out by the logged-in user.
  *     responses:
