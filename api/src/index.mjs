@@ -4,9 +4,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
+import categoryRoutes from "./routers/category.js"
 import rentalRouter from "./routers/rentals.js";
-
-// for swagger
 import swaggerSpec from "./configs/swagger.js";
 import swaggerUi from "swagger-ui-express";
 
@@ -26,6 +25,7 @@ apiRouter.use("/users", userRouter);
 
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/rentals", rentalRouter);
 
 app.listen(PORT, () => {
