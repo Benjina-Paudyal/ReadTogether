@@ -1,6 +1,6 @@
 import { verifyToken } from "../services/jwt.js";
 
-export default function authMiddleware(req, res, next) {
+export const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -21,9 +21,40 @@ export default function authMiddleware(req, res, next) {
     next();
   } catch (err) {
     console.error("Auth middleware error:", err);
-
     return res.status(401).json({
       message: "Unauthorized - invalid or expired token",
     });
   }
-}
+};
+
+export const requireNormalUser = (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (req.user.role !== "normal_user") {
+      return res.status(403).json({ message: "Only normal users allowed" });
+    }
+
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+};
+
+export const requireAdmin = (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({ message: "Forbidden: Admins only" });
+    }
+
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+};
