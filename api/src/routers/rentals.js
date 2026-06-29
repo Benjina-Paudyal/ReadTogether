@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/rentals:
+ * /rentals:
  *   post:
  *     tags:
  *       - Rentals
@@ -57,7 +57,7 @@ router.post("/", authMiddleware, RentalController.createRental);
 
 /**
  * @swagger
- * /api/rentals/{id}/accept:
+ * /rentals/{id}/accept:
  *   patch:
  *     tags:
  *       - Rentals
@@ -95,7 +95,7 @@ router.patch("/:id/accept", authMiddleware, RentalController.acceptRental);
 
 /**
  * @swagger
- * /api/rentals/{id}/handover:
+ * /rentals/{id}/handover:
  *   patch:
  *     tags:
  *       - Rentals
@@ -131,7 +131,7 @@ router.patch("/:id/handover", authMiddleware, RentalController.handoverBook);
 
 /**
  * @swagger
- * /api/rentals/{id}/return:
+ * /rentals/{id}/return:
  *   patch:
  *     tags:
  *       - Rentals
