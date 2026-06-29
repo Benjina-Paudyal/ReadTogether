@@ -16,6 +16,8 @@ const mockAuth = (req, res, next) => {
  * @swagger
  * /api/rentals:
  *   post:
+ *     tags:
+ *       - Rentals
  *     summary: Create a rental request for a book
  *     description: Automatically identifies the borrower via the login token, verifies book availability, and instantiates a new rental entry with a 'REQUESTED' status.
  *     requestBody:
@@ -67,6 +69,8 @@ router.post("/", mockAuth, RentalController.createRental);
  * @swagger
  * /api/rentals/{id}/accept:
  *   patch:
+ *     tags:
+ *       - Rentals
  *     summary: Accept a rental request
  *     description: Allows the book owner to accept an incoming rental request. Verifies ownership via token identity, checks that the current state is 'REQUESTED', and transitions the state to 'APPROVED'.
  *     parameters:
@@ -105,8 +109,10 @@ router.patch("/:id/accept", mockAuth, RentalController.acceptRental);
  * @swagger
  * /api/rentals/{id}/handover:
  *   patch:
+ *     tags:
+ *       - Rentals
  *     summary: Confirm the handover of a book
- *     description: Allows the book owner to confirm that the borrower has received the book. Verifies ownership via token identity, checks that the current state is 'APPROVED', and transitions the state to 'RENTED'.
+ *     description: Allows the assigned borrower to confirm receipt of the book. Verifies borrower identity via token, checks that the current state is 'APPROVED', and transitions the state to 'RENTED'.
  *     parameters:
  *       - in: path
  *         name: id
@@ -127,7 +133,7 @@ router.patch("/:id/accept", mockAuth, RentalController.acceptRental);
  *       400:
  *         description: Bad Request - Rental is not in an 'APPROVED' state.
  *       403:
- *         description: Forbidden - Only the book owner is authorized to confirm handovers.
+ *         description: Forbidden - Only the assigned borrower is authorized to confirm handovers.
  *       404:
  *         description: Not Found - Rental record not found.
  *       500:

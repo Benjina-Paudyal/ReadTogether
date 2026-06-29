@@ -81,10 +81,10 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  // Fraud Prevention: Only the book owner can trigger a handover
-  if (rental.owner_id !== loggedInUserId) {
+  // Identity Check: Only the borrower can confirm they received it
+  if (rental.borrower_id !== loggedInUserId) {
     const error = new Error(
-      "Unauthorized. Only the book owner can confirm handovers."
+      "Unauthorized. Only the borrower who requested this book can confirm handover."
     );
     error.status = 403;
     throw error;

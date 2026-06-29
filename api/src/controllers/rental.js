@@ -67,11 +67,13 @@ export const handoverBook = async (req, res) => {
     console.error("Handover Controller Error:", error);
     return res.status(error.status || 500).json({
       error:
-        error.status === 403
-          ? "Forbidden"
-          : error.status === 404
-            ? "Not Found"
-            : "Internal Server Error",
+        error.status === 400
+          ? "Bad Request"
+          : error.status === 403
+            ? "Forbidden"
+            : error.status === 404
+              ? "Not Found"
+              : "Internal Server Error",
       message:
         error.message || "An error occurred during the book handover process.",
     });
