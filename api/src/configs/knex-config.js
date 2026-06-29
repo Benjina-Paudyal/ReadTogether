@@ -1,6 +1,8 @@
 import knex from "knex";
 import "dotenv/config";
 
+const isProductionDB = process.env.DB_ENV === "production";
+
 export function createKnexConfig() {
   const isProductionDB = process.env.DB_ENV === "production";
   return {
@@ -14,12 +16,15 @@ export function createKnexConfig() {
 
       ssl: isProductionDB ? { rejectUnauthorized: false } : false,
     },
+
     migrations: {
       directory: "./src/db/migrations",
       loadExtensions: [".js"],
     },
+
     seeds: {
       directory: "./src/db/seeds",
+      loadExtensions: [".js"],
     },
   };
 }
