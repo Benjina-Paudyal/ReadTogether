@@ -1,7 +1,8 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { findUserByEmail } from "../models/auth.js";
+import { BcryptService } from "../services/encryption.js";
+import { findUserByEmail } from "../models/user.js";
 
 // JWT_SECRET from .env
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -22,7 +23,10 @@ export const login = async (req, res) => {
     }
 
     // if email exists, check password
-    const isMatch = await bcrypt.compare(password, user.password_hash);
+    const isMatch = await BcryptService.comparePassword(
+      password,
+      user.password_hash
+    );
 
     // if not match
     if (!isMatch) {

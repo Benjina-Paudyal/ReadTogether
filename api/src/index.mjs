@@ -24,6 +24,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // auth service (remember MVC)
 app.use("/api/auth", authRouter);
 
+const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
 // Example route to check DB
@@ -37,10 +38,9 @@ const PORT = process.env.PORT ?? 3000;
   }
 }); */
 
-apiRouter.use("/users", userRouter);
-
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
+app.use("/api/users", userRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);

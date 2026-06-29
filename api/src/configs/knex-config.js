@@ -4,7 +4,6 @@ import "dotenv/config";
 const isProductionDB = process.env.DB_ENV === "production";
 
 export function createKnexConfig() {
-  const isProductionDB = process.env.DB_ENV === "production";
   return {
     client: "pg",
     connection: {
