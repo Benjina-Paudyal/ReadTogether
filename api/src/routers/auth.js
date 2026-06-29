@@ -1,15 +1,16 @@
 import express from "express";
-import { AuthController } from "../controllers/authController.js";
+import { login } from "../controllers/auth.js";
 
 const router = express.Router();
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
+ *     tags:
+ *       - Auth
  *     summary: Login user
  *     description: Authenticate a user and return a JWT token.
- *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -46,6 +47,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/login", AuthController.login);
+
+router.post("/login", login);
 
 export default router;
