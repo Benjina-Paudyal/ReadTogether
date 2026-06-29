@@ -43,3 +43,17 @@ export const me = (req, res) => {
     });
   }
 };
+
+// Log out the current user
+export const logout = async (req, res) => {
+  try {
+    return res.status(200).json({
+      message: "Logout successful. Session invalidated.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};

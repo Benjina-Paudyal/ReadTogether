@@ -1,11 +1,10 @@
-import { comparePassword } from "../services/encription.js";
+import { comparePassword } from "../services/encryption.js";
 
 const FAKE_USER = {
   id: 1,
   email: "test@example.com",
   role: "normal_user",
-  passwordHash:
-    "$2b$10$SETqkauqyHHn95OLeNrTM.YBc4o4CCCbcxdgVeiPVEmSjtDBUZrHK",
+  passwordHash: "$2b$10$SETqkauqyHHn95OLeNrTM.YBc4o4CCCbcxdgVeiPVEmSjtDBUZrHK",
 };
 
 export async function login(email, password) {
@@ -15,10 +14,7 @@ export async function login(email, password) {
   }
 
   // 2. use service (NOT bcrypt directly)
-  const isMatch = await comparePassword(
-    password,
-    FAKE_USER.passwordHash
-  );
+  const isMatch = await comparePassword(password, FAKE_USER.passwordHash);
 
   if (!isMatch) {
     throw new Error("Invalid credentials");

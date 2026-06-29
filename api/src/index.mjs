@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import authRoutes from "./routers/authRoutes.js";
+import authRoutes from "./routers/auth.js";
 import connection from "./configs/knex-config.js";
 
 // for swagger
@@ -19,7 +19,6 @@ app.use(bodyParser.json()); // or app.use(express.json())
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
 const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
@@ -34,12 +33,10 @@ apiRouter.get("/", async (req, res) => {
   }
 });
 
-
 // auth Routes
 apiRouter.use("/auth", authRoutes);
 
 app.use("/api", apiRouter);
-
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
