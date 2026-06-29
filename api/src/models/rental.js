@@ -68,6 +68,14 @@ export const findActiveRentalsWithBooksByBorrowerId = async (userId) => {
       "Rentals.due_date",
       "Books.id as book_id",
       "Books.title",
-      "Books.description"
+      "Books.description",
     );
 };
+
+export function findRentalById(id) {
+  return connection("Rentals").where({ id }).first();
+}
+
+export function updateRentalById(id, data) {
+  return connection("Rentals").where({ id }).update(data).returning("*");
+}

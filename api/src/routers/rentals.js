@@ -1,16 +1,8 @@
 import express from "express";
 import * as RentalController from "../controllers/rental.js";
+import { authMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
-
-// MOCK AUTHENTICATION MIDDLEWARE PLACEHOLDER
-// TODO: Replace this with real JWT verification middleware once feature/auth is merged
-const mockAuth = (req, res, next) => {
-  req.user = {
-    id: 1, // Simulated Borrower ID
-  };
-  next();
-};
 
 /**
  * @swagger
@@ -61,9 +53,7 @@ const mockAuth = (req, res, next) => {
  *       500:
  *         description: Internal Server Error
  */
-
-// TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.post("/", mockAuth, RentalController.createRental);
+router.post("/", authMiddleware, RentalController.createRental);
 
 /**
  * @swagger
@@ -101,9 +91,7 @@ router.post("/", mockAuth, RentalController.createRental);
  *       500:
  *         description: Internal Server Error
  */
-
-// TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.patch("/:id/accept", mockAuth, RentalController.acceptRental);
+router.patch("/:id/accept", authMiddleware, RentalController.acceptRental);
 
 /**
  * @swagger
@@ -139,8 +127,33 @@ router.patch("/:id/accept", mockAuth, RentalController.acceptRental);
  *       500:
  *         description: Internal Server Error
  */
+router.patch("/:id/handover", authMiddleware, RentalController.handoverBook);
 
-// TODO: Replace mockAuth with real token validation middleware once feature/auth is merged
-router.patch("/:id/handover", mockAuth, RentalController.handoverBook);
+/**
+ * @swagger
+ * /api/rentals/{id}/return:
+ *   patch:
+ *     tags:
+ *       - Rentals
+ *     summary: Borrower returns the book
+ *     description: Allows the borrower to mark the book as returned.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Rental ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Rental marked as returned
+ *       400:
+ *         description: Invalid status
+ *       403:
+ *         description: Not borrower
+ *       404:
+ *         description: Rental not found
+ */
+router.patch("/:id/return", authMiddleware, RentalController.returnRental);
 
 export default router;

@@ -1,7 +1,8 @@
+
 export const RENTAL_STATUS = {
-  REQUESTED: "REQUESTED",
-  APPROVED: "APPROVED",
-  DECLINED: "DECLINED",
-  RENTED: "RENTED",
-  RETURNED: "RETURNED",
+  REQUESTED: "requested",
+  APPROVED: "approved",
+  DECLINED: "declined",
+  RENTED: "rented",
+  RETURNED: "returned",
 };

@@ -3,10 +3,12 @@ import {
   createRentalRequest,
   findRentalWithOwnerAndBook,
   updateRentalStatus,
+  findRentalById,
+  updateRentalById,
 } from "../models/rental.js";
 import { RENTAL_STATUS } from "../constants/rentalStatuses.js";
 
-//Processes a new book rental request after validating availability
+// Processes a new book rental request after validating availability
 export const requestBook = async (bookId, borrowerId) => {
   const activeRental = await findActiveRentalByBookId(bookId);
 
@@ -18,7 +20,6 @@ export const requestBook = async (bookId, borrowerId) => {
     throw error;
   }
 
-  //Create the Rental Request: Insert with unified uppercase constant
   const newRental = await createRentalRequest({
     book_id: bookId,
     borrower_id: borrowerId,
@@ -32,7 +33,7 @@ export const requestBook = async (bookId, borrowerId) => {
   };
 };
 
-//Validates ownership and current state before accepting a rental request.
+// Validates ownership and current state before accepting a rental request.
 export const acceptRentalRequest = async (rentalId, loggedInUserId) => {
   const rental = await findRentalWithOwnerAndBook(rentalId);
 
@@ -42,7 +43,6 @@ export const acceptRentalRequest = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  //Fraud Prevention: Only the book owner can accept rental requests
   if (rental.owner_id !== loggedInUserId) {
     const error = new Error(
       "Unauthorized. Only the book owner can accept rental requests."
@@ -51,7 +51,6 @@ export const acceptRentalRequest = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  //Status Validation
   if (rental.status !== RENTAL_STATUS.REQUESTED) {
     const error = new Error(
       `Cannot accept a rental request that is currently '${rental.status}'.`
@@ -71,7 +70,7 @@ export const acceptRentalRequest = async (rentalId, loggedInUserId) => {
   };
 };
 
-//Process a book handover
+// Process a book handover
 export const handoverBook = async (rentalId, loggedInUserId) => {
   const rental = await findRentalWithOwnerAndBook(rentalId);
 
@@ -81,7 +80,6 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  // Identity Check: Only the borrower can confirm they received it
   if (rental.borrower_id !== loggedInUserId) {
     const error = new Error(
       "Unauthorized. Only the borrower who requested this book can confirm handover."
@@ -90,7 +88,6 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     throw error;
   }
 
-  // Status Validation: Ensure the rental has been approved before handover
   if (rental.status !== RENTAL_STATUS.APPROVED) {
     const error = new Error(
       `Cannot handover a book with a rental status of '${rental.status}'.`
@@ -108,4 +105,27 @@ export const handoverBook = async (rentalId, loggedInUserId) => {
     message: "Book handover successfully confirmed. Rental is now active.",
     data: updatedRental,
   };
+};
+
+// Process a book return
+export const returnRentalService = async (rentalId, userId) => {
+  const rental = await findRentalById(rentalId);
+
+  if (!rental) throw new Error("RENTAL_NOT_FOUND");
+
+  if (rental.borrower_id !== userId) {
+    throw new Error("NOT_BORROWER");
+  }
+
+  // Uniform status check alignment
+  if (rental.status !== RENTAL_STATUS.RENTED && rental.status !== "rented") {
+    throw new Error("INVALID_STATUS");
+  }
+
+  const updated = await updateRentalById(rentalId, {
+    status: "returned", // Match database storage pattern
+    returned_at: new Date(),
+  });
+
+  return updated[0];
 };

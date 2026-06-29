@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connection from "./configs/knex-config.js";
+
 import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
 import rentalRouter from "./routers/rentals.js";
