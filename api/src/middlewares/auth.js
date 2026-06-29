@@ -4,23 +4,28 @@ export const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Missing or invalid token" });
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
     }
 
     const token = authHeader.split(" ")[1];
 
+    if (!token) {
+      return res.status(401).json({ message: "Invalid token format" });
+    }
+
     const decoded = verifyToken(token);
-    console.log(decoded)
-    // mocked user for now
+
     req.user = decoded;
 
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Unauthorized" });
+    console.error("Auth middleware error:", err);
+    return res.status(401).json({
+      message: "Unauthorized - invalid or expired token",
+    });
   }
 };
-
 
 export const requireNormalUser = (req, res, next) => {
   try {
