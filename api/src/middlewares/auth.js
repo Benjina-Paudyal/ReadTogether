@@ -1,6 +1,6 @@
 import { verifyToken } from "../services/jwt.js";
 
-export default function authMiddleware(req, res, next) {
+export const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -26,4 +26,4 @@ export default function authMiddleware(req, res, next) {
       message: "Unauthorized - invalid or expired token",
     });
   }
-}
+};
