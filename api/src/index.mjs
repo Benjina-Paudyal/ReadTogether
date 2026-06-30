@@ -4,8 +4,10 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import authRouter from "./routers/auth.js";
 import connection from "./configs/knex-config.js";
+
 import userRouter from "./routers/user.js";
 import bookRoutes from "./routers/book.js";
+import rentalRouter from "./routers/rentals.js";
 
 // for swagger
 // import swaggerSpec from "./swagger.js";
@@ -41,6 +43,7 @@ const PORT = process.env.PORT ?? 3000;
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRouter);
+app.use("/api/rentals", rentalRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
