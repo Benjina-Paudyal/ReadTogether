@@ -1,12 +1,6 @@
-export const loginValidator = (req, res, next) => {
-  const { email, password } = req.body;
+import { z } from "zod";
 
-  if (!email || !password) {
-    return res.status(400).json({
-      error: "Bad Request",
-      message: "Email and password are required fields.",
-    });
-  }
-
-  next();
-};
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});

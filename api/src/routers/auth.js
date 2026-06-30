@@ -1,6 +1,5 @@
 import express from "express";
 import { login } from "../controllers/auth.js";
-import { loginValidator } from "../validators/auth.js";
 
 const router = express.Router();
 
@@ -49,6 +48,6 @@ const router = express.Router();
  *         description: Internal server error
  */
 
-router.post("/login", loginValidator, login);
+router.post("/login", login);
 
 export default router;
