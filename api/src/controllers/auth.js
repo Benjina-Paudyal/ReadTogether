@@ -1,51 +1,18 @@
-import "dotenv/config";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { BcryptService } from "../services/encryption.js";
-import { findUserByEmail } from "../models/user.js";
-
-// JWT_SECRET from .env
-const JWT_SECRET = process.env.JWT_SECRET;
-// JWT_EXPIRES_IN from .env (1 day)
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";
+import { authenticateUser } from "../services/user.js";
 
 // Authenticate a user and issue a JWT token
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // check existence of email (AuthModel.findByEmail) using dot notation
-    const user = await findUserByEmail(email);
+    const token = await authenticateUser(email, password);
 
-    // if email doesn't exist
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // if email exists, check password
-    const isMatch = await BcryptService.comparePassword(
-      password,
-      user.password_hash
-    );
-
-    // if not match
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    //   if match (then create token) and pass payload
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-
-    //   sending response from of json object
     res.json({
       message: "Login successful",
       token,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // Gracefully catch custom status codes (e.g., 401) from the service, or default to 500
+    res.status(err.status || 500).json({ error: err.message });
   }
 };
