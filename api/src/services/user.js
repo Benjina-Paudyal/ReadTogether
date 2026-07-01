@@ -2,6 +2,7 @@ import { findBooksByUserId } from "../models/book.js";
 import { findActiveRentalsWithBooksByBorrowerId } from "../models/rental.js";
 
 import { BcryptService } from "./encryption.js";
+import { issueToken } from "./jwt.js";
 import { createUser, findUserByEmail } from "../models/user.js";
 
 export const getCurrentUserBooks = async (userId) => {

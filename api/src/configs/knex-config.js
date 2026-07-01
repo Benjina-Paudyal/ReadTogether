@@ -13,9 +13,7 @@ export function createKnexConfig() {
       database: process.env.DB_NAME,
       port: Number(process.env.DB_PORT || 5432),
 
-      ssl: isProductionDB
-        ? { rejectUnauthorized: false }
-        : false,
+      ssl: isProductionDB ? { rejectUnauthorized: false } : false,
     },
 
     migrations: {
