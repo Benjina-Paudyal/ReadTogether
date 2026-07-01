@@ -1,4 +1,5 @@
 import { createRentalSchema } from "../validators/rentals.js";
+import * as RentalService from "../services/rental.js";
 
 export const createRental = async (req, res) => {
   try {

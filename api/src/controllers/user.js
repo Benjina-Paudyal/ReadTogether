@@ -79,8 +79,7 @@ export const getUserById = async (req, res) => {
 
 export const getCurrentUserBooksController = async (req, res) => {
   try {
-    // Handles /me and future admin endpoints
-    const userId = req.params.id || req.user.id;
+    const userId = req.user.id;
     const books = await getCurrentUserBooks(userId);
 
     return res.status(200).json(books);
@@ -95,8 +94,8 @@ export const getCurrentUserBooksController = async (req, res) => {
 
 export const getCurrentUserBorrowedController = async (req, res) => {
   try {
-    // Handles /me and future admin endpoints
-    const userId = req.params.id || req.user.id;
+    
+    const userId = req.user.id;
 
     const borrowedBooks = await getCurrentUserBorrowedBooks(userId);
 

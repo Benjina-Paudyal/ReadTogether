@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import authRouter from "./routers/auth.js";
+import categoryRouter from "./routers/category.js";
 import connection from "./configs/knex-config.js";
 
 import userRouter from "./routers/user.js";
@@ -29,21 +30,11 @@ app.use("/api/auth", authRouter);
 const apiRouter = express.Router();
 const PORT = process.env.PORT ?? 3000;
 
-// Example route to check DB
-/* apiRouter.get("/", async (req, res) => {
-  try {
-    const data = await connection("practise_table"); // table must exist in DB
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-}); */
-
 app.use("/api", apiRouter);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRouter);
 app.use("/api/rentals", rentalRouter);
+app.use("/api/categories", categoryRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
