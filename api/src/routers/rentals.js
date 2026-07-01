@@ -10,6 +10,8 @@ const router = express.Router();
  *   post:
  *     tags:
  *       - Rentals
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a rental request for a book
  *     description: Automatically identifies the borrower via the login token, verifies book availability, and instantiates a new rental entry with a 'REQUESTED' status.
  *     requestBody:
@@ -61,6 +63,8 @@ router.post("/", authMiddleware, RentalController.createRental);
  *   patch:
  *     tags:
  *       - Rentals
+ *     security:
+ *       - bearerAuth: []
  *     summary: Accept a rental request
  *     description: Allows the book owner to accept an incoming rental request. Verifies ownership via token identity, checks that the current state is 'REQUESTED', and transitions the state to 'APPROVED'.
  *     parameters:
@@ -99,6 +103,8 @@ router.patch("/:id/accept", authMiddleware, RentalController.acceptRental);
  *   patch:
  *     tags:
  *       - Rentals
+ *     security:
+ *       - bearerAuth: []
  *     summary: Confirm the handover of a book
  *     description: Allows the assigned borrower to confirm receipt of the book. Verifies borrower identity via token, checks that the current state is 'APPROVED', and transitions the state to 'RENTED'.
  *     parameters:
@@ -135,6 +141,8 @@ router.patch("/:id/handover", authMiddleware, RentalController.handoverBook);
  *   patch:
  *     tags:
  *       - Rentals
+ *     security:
+ *       - bearerAuth: []
  *     summary: Borrower returns the book
  *     description: Allows the borrower to mark the book as returned.
  *     parameters:

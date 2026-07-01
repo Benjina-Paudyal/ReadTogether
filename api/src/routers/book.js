@@ -7,6 +7,8 @@ import {
   deleteBook,
   getAvailability,
 } from "../controllers/book.js";
+import {authMiddleware} from "../middlewares/auth.js";
+import { canModifyBook } from "../utilities/permissions/bookPermissions.js";
 
 const router = express.Router();
 
@@ -55,13 +57,14 @@ router.get("/", getBooks);
 // GET /books/:id
 router.get("/:id", getBookById);
 
-
 /**
  * @swagger
  * /books:
  *   post:
  *     summary: Create a new book
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     description: Creates a new book entry in the system
  *     requestBody:
  *       required: true
@@ -94,57 +97,9 @@ router.get("/:id", getBookById);
  *     responses:
  *       201:
  *         description: Book created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 title:
- *                   type: string
- *                 description:
- *                   type: string
- *                 cover_url:
- *                   type: string
- *                 condition:
- *                   type: string
- *                 category_id:
- *                   type: integer
- *                 user_id:
- *                   type: integer
- *                 created_at:
- *                   type: string
- *                 updated_at:
- *                   type: string
- *       400:
- *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 errors:
- *                   type: array
- *                   items:
- *                     type: object
  */
 // POST /books
-// router.post("/", createBook);
-
-//// Temporary mock auth for Swagger demo (to be replaced with JWT middleware)
-router.post(
-  "/",
-  (req, res, next) => {
-    // mock auth for Swagger demo
-    req.user = { id: Number(req.body.user_id) || 1 };
-    next();
-  },
-  createBook
-);
-
+router.post("/", authMiddleware, createBook);
 
 /**
  * @swagger
@@ -152,6 +107,8 @@ router.post(
  *   put:
  *     summary: Update a book
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -167,27 +124,30 @@ router.post(
  *     responses:
  *       200:
  *         description: Book updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
  *       400:
  *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 errors:
- *                   type: array
- *                   items:
- *                     type: object
  *       404:
  *         description: Book not found
  */
-router.put("/:id", updateBook);
+router.put(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    const result = await canModifyBook(req.user, req.params.id);
+
+    if (!result.allowed) {
+      if (result.reason === "NOT_FOUND") {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    req.book = result.book;
+    next();
+  },
+  updateBook,
+);
 
 /**
  * @swagger
@@ -195,6 +155,8 @@ router.put("/:id", updateBook);
  *   delete:
  *     summary: Delete a book
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -214,7 +176,25 @@ router.put("/:id", updateBook);
  *       404:
  *         description: Book not found
  */
-router.delete("/:id", deleteBook);
+router.delete(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    const result = await canModifyBook(req.user, req.params.id);
+
+    if (!result.allowed) {
+      if (result.reason === "NOT_FOUND") {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    req.book = result.book; // optional
+    next();
+  },
+  deleteBook
+);
 
 /**
  * @swagger
@@ -246,5 +226,6 @@ router.delete("/:id", deleteBook);
  *         description: Book not found
  */
 router.get("/:id/availability", getAvailability);
+
 
 export default router;

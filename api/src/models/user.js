@@ -15,7 +15,7 @@ export const findAllUsers = async () => {
 export const findUserById = async (id) => {
   return await connection("Users")
     .where({ id })
-    .select("id", "name", "email", "location", "created_at")
+    .select("id", "name", "email", "location", "role","created_at")
     .first();
 };
 
@@ -23,7 +23,7 @@ export const findUserById = async (id) => {
 export const findUserByEmail = async (email) => {
   return await connection("Users")
     .where({ email })
-    .select("id", "name", "email", "location", "created_at")
+    .select("id", "name", "email", "location", "role", "created_at", "password_hash")
     .first();
 };
 

@@ -4,9 +4,11 @@ export function findCategoryByName(name) {
   return connection("Category").where({ name }).first();
 }
 
-export function insertCategory(data) {
-  return connection("Category").insert(data);
-}
+export const insertCategory = async (data) => {
+  return await connection("Category")
+    .insert(data)
+    .returning("*");
+};
 
 export function getAllCategories() {
   return connection("Category").select("*");

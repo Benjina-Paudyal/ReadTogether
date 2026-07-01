@@ -1,7 +1,7 @@
 import express from "express";
 import { createCategory,  getCategories, getCategoryById, } from "../controllers/category.js";
-// import authMiddleware from "../middlewares/auth.js";
-// import { requireRole } from "../middlewares/role.js";
+import {authMiddleware } from "../middlewares/auth.js";
+import { requireRole } from "../middlewares/role.js";
 
 const router = express.Router();
 
@@ -34,15 +34,12 @@ const router = express.Router();
  *         description: Forbidden (Admin only)
  */
 
-// ONCE MIDDLEWARE IS IMPLEMENTED
-// router.post(
-//   "/",
-//   authMiddleware,
-//   requireRole("admin"),
-//   createCategory
-// );
-
-router.post("/", createCategory);
+router.post(
+  "/",
+  authMiddleware,
+  requireRole("admin"),
+  createCategory
+);
 
 /**
  * @swagger

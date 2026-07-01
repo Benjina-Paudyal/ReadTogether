@@ -13,7 +13,11 @@ export async function createCategoryService(data) {
     throw new Error("CATEGORY_EXISTS");
   }
 
-  const [category] = await insertCategory(data);
+  const [category] = await insertCategory({
+    name: data.name,
+    description: data.description || null,
+  });
+
   return category;
 }
 

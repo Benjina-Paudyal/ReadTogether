@@ -9,43 +9,34 @@ const options = {
     info: {
       title: "Books API",
       version: "1.0.0",
-      description: "Simple MVC Books API"
+      description: "Simple MVC Books API",
     },
 
-    
     tags: [
-      {
-        name: "Auth",
-        description: "Authentication APIs"
-      },
-      {
-        name: "User",
-        description: "User APIs"
-      },
-      
+      { name: "Auth", description: "Authentication APIs" },
+      { name: "User", description: "User APIs" },
     ],
 
     servers: [
       {
-        url: `http://localhost:${PORT}/api`
-      }
+        url: `http://localhost:${PORT}/api`,
+      },
     ],
 
-    // ADD THIS (JWT AUTH)
     components: {
       securitySchemes: {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT"
-        }
-      }
+          bearerFormat: "JWT",
+        },
+      },
     },
 
-
+    security: [],
   },
 
-  apis: ["./src/routers/*.js"]
+  apis: ["./src/routers/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
